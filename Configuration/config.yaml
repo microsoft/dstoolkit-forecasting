@@ -1,0 +1,7 @@
+data_dir:
+  input_path: "Data/Input"
+  output_path: "Data/Output"
+  plot_path: "Data/Plots"
+saving:
+  to_excel: False
+  to_aml: False
