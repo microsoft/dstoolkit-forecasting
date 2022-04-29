@@ -55,13 +55,13 @@ Based on their values, it is possible to identify intermittent time series as:
   - Clustering regular time series using K-Means flat
   - Choose the optimal number of clusters ​
     - As a method to choose the optimal number of cluster, use max explained variance at the minimum number of cluster -> Elbow Method​
-    (Docs/Images/elbow.png)
+    ![Alt text](Docs/Images/elbow.png?raw=true "Elbow method")
     - Check weather identified profiles have a business meaning
     - Define and assign a best model:
       - use temperatures if thermal consumption is present in an energy consumption use case 
-        (Docs/Images/thermal.png)
+        ![Alt text](Docs/Images/thermal.png?raw=true "Thermal time series")
       - use calenadar variables correlation with temperatures is not present 
-        (Docs/Images/calendar.png)
+        ![Alt text](Docs/Images/calendar.png?raw=true "Calendar time series")
 
 #### Methods to forecast regular time series
 - Linear regression (implemented)
