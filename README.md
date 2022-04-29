@@ -13,14 +13,11 @@ Time series modelling is defined as the combination of:
 Each model is optimized to better fit the data generation process of the phenomenon we want to forecast: from energy consumption to spare parts demand. Classification of time series in terms of profile, or consumption profile if we are referring to energy consumption, helps in defining the best fitting model in terms of choice of regressors (calendar variables or temperatures), forecasting algorithm (ARIMA vs exponential smoothing) and train set (one year or just few days of data). 
 
 # Profiling (clustering) Time Series:​
-## Goal
-Identify consumption patterns that are similar to each other in order to assign the optimal model in terms of min of MAE or MSE​
+The **goal** is to identify consumption patterns that are similar to each other in order to assign the optimal model in terms of min of MAE or MSE​. 
 
-## How to
-Identify those series that are classified as “intermittent” with respect to those “smooth”​
+The **first step** is to identify those series that are classified as “intermittent” with respect to those “regular”​ and **then** proceed to perform a k-means cluster analysis only on the latter. 
 
-## Expected output
-Label each time series as intermittent with respect to regular
+The **expected output** is to label each time series as intermittent with respect to regular.
 
 ### Identifying intermittent time series:​
 
