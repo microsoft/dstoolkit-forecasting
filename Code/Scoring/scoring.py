@@ -27,12 +27,15 @@ class Scoring:
         :params: y as string, dict_train as dictionary, dict_test as dictionary, dict_algorithm as dictionary
         :return: a string
         """
-        dict_kpi = Kpi.find_mae(y, dict_train, dict_test, dict_algorithms)
-        # Best model
-        df_best_model = pd.DataFrame.from_dict(dict_kpi, orient='index').reset_index()
-        df_best_model.rename(columns={'index': 'model', 0: 'mae'}, inplace=True)
-        best_model = df_best_model.loc[df_best_model.mae==df_best_model.mae.min(), 'model'].reset_index(drop=True)[0]
-
+        try:
+            dict_kpi = Kpi.find_mae(y, dict_train, dict_test, dict_algorithms)
+            # Best model        
+            df_best_model = pd.DataFrame.from_dict(dict_kpi, orient='index').reset_index()
+            df_best_model.rename(columns={'index': 'model', 0: 'mae'}, inplace=True)
+            best_model = df_best_model.loc[df_best_model.mae==df_best_model.mae.min(), 'model'].reset_index(drop=True)[0]
+        except:
+            print('best model could not be computed, no KPI available, using default algorithm. Check to have an overlap between training and test sets dates!')
+            best_model = 'default'
         return best_model
     
     def stats_per_site(df, id, date_var):

@@ -147,11 +147,14 @@ class Regressors:
         :return: a pandas dataframe
         
         """
+        
+        date_var = Utils.find_date(df)
+        date_var_weather = Utils.find_date(weather)
 
         # drop duplicate values in weather and pick the closest weather station
         weather_cleaned = weather.sort_values([date_var, id, "distance"]).groupby([date_var, id]).first().reset_index()
         assert weather_cleaned.groupby([date_var, id]).count().max().max() == 1
 
-        df = pd.merge(df.sort_values([date_var, id]), weather_cleaned.sort_values([date_var]), on=[date_var, id], how='left', validate="m:1")
+        df = pd.merge(df.sort_values([date_var, id]), weather_cleaned.sort_values([date_var_weather]), left_on=[date_var, id], right_on= [date_var_weather, id], how='left', validate="m:1")
 
         return df

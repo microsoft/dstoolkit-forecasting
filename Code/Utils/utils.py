@@ -1,9 +1,9 @@
 # data elaboration functions
 import pandas as pd
-from six.moves import collections_abc
 import string
 import numpy as np
 import re
+from functools import reduce
 
 # datetime functions
 import datetime as dt
@@ -239,29 +239,31 @@ class Utils:
             print('resample_data: variable', list_variables[k], 'completed' )
         print(df_resampled)
         return df_resampled 
-    
-    
+       
     def add_seq(df, date_var, serie, freq, end_date='', start_date=''):
         """
         Creates a sequence of completes date/hours to a dataframe
         :params: dataframe in long format to add date/hour observations, date_var as string, 
             serie or id as string or list, freq as datetime.timedelta end and start date in format "%dd/%mm/%YYYY"
         :return: a Pandas dataframe
-        """        
+        """       
+        
+        df.loc[:, date_var] = df[date_var].apply(lambda x: x.tz_localize(None))
+
         if isinstance(serie, list)==False:
             seq = pd.DataFrame() 
             serie_list = list(df.loc[:, serie].unique())
             for i in serie_list:
                 if start_date == '':
-                    start_date = min(df.loc[df[serie]==i, date_var])
+                    start_date = min(df.loc[df[serie]==i, date_var]).tz_localize(None)
                 else:
-                    start_date = pd.to_datetime(start_date, dayfirst=True)
+                    start_date = pd.to_datetime(start_date, dayfirst=True).tz_localize(None)
                     
                 if end_date == '':
-                    end_date = max(df.loc[df[serie]==i, date_var])
+                    end_date = max(df.loc[df[serie]==i, date_var]).tz_localize(None)
                 else:
-                    end_date = pd.to_datetime(end_date, dayfirst=True)
-                
+                    end_date = pd.to_datetime(end_date, dayfirst=True).tz_localize(None)
+                                    
                 # Sequence        
                 time_range = pd.Series(pd.date_range(
                         start=start_date, end=end_date, freq=freq))
@@ -286,14 +288,14 @@ class Utils:
                     col_name = serie_list.columns[c]
                     id_col = serie_list.loc[i,col_name]
                     if start_date == '':
-                        start_date = min(df.loc[(df[col_name]==id_col), date_var])
+                        start_date = min(df.loc[(df[col_name]==id_col), date_var]).tz_localize(None)
                     else:
-                        start_date = pd.to_datetime(start_date, dayfirst=True)
+                        start_date = pd.to_datetime(start_date, dayfirst=True).tz_localize(None)
                         
                     if end_date == '':
-                        end_date = max(df.loc[(df[col_name]==id_col), date_var])
+                        end_date = max(df.loc[(df[col_name]==id_col), date_var]).tz_localize(None)
                     else:
-                        end_date = pd.to_datetime(end_date, dayfirst=True)
+                        end_date = pd.to_datetime(end_date, dayfirst=True).tz_localize(None)
                     
                     # Sequence        
                     time_range = pd.Series(pd.date_range(
@@ -324,9 +326,112 @@ class Utils:
 
         return df_seq
     
+    def check_length_time_serie(df, date_var, index):
+        freq = pd.Series(df[date_var].unique()).dt.freq
+        pivot = pd.pivot_table(df, index=index, values=date_var, aggfunc=['count', 'min', 'max']).reset_index()
+        pivot.columns = pivot.columns.get_level_values(0)
+        pivot.loc[:, 'td'] = pivot.loc[:, 'max'].max() - pivot.loc[:, 'min'].min()
+        if freq=='H':
+            pivot.loc[:, 'freq'] = 'H'
+            pivot.loc[:, 'expected_obs'] = pivot.loc[:, 'td'].apply(lambda x: x.days*24) + pivot.loc[:, 'td'].apply(lambda x: x.seconds/3600) + 1
+        elif freq=='D':
+            pivot.loc[:, 'freq'] = 'D'
+            pivot.loc[:, 'expected_obs'] = pivot.loc[:, 'td'].apply(lambda x: x.days) + pivot.loc[:, 'td'].apply(lambda x: x.seconds/3600*24) + 1
+        else:
+            pivot.loc[:, 'freq'] = np.nan
+            pivot.loc[:, 'expected_obs'] = np.nan
+            print('check_length_time_serie: could not infer frequency')
 
+        print('Expected length of sequence:', pivot)
+        return pivot
     
+    def match_to_find(serie_to_find):
+        match_to_find = []
+        match_to_find = match_to_find + [serie_to_find]
+        match_to_find = match_to_find + [serie_to_find.lower()]
+        match_to_find = match_to_find + [serie_to_find.upper()]
+        match_to_find = match_to_find + [serie_to_find.capitalize()]
+        match_to_find = match_to_find + [re.sub('[^a-zA-Z0-9 \n\.]', '_', serie_to_find)]
+        match_to_find = match_to_find + [re.sub('[^a-zA-Z0-9 \n\.]', '_', serie_to_find.lower())]
+        match_to_find = match_to_find + [re.sub('[^a-zA-Z0-9 \n\.]', '_', serie_to_find.upper())]
+        match_to_find = match_to_find + [re.sub('[^a-zA-Z0-9 \n\.]', '_', serie_to_find.capitalize())]
+        return match_to_find 
+    
+    def find_match(df, serie_name, match_to_find):
+        """
+        Finds a match in a dataframe serie given a list of possible words to match
+        :params: dataframe, serie_name as string, match_to_find as a list of words to match
+        :return: a list
+        """
 
+        list_to_match = list(df.loc[:, serie_name].unique())
+        match_list = list()
+        for m in match_to_find:
+            match_list.extend([el for el in list_to_match if isinstance(el, collections_abc.Iterable) and (m in el)])
+
+        match_list = list(dict.fromkeys(match_list))
+        return match_list
+    
+    def find_match_in_list(list_to_match, match_to_find):
+        """
+        Finds a match in a list given a list of possible words to match
+        :params: list to match as a list, match_to_find as a list of words to match
+        :return: a list
+        """
+
+        list_to_match = list(dict.fromkeys(list_to_match))
+        match_list = list()
+        for m in match_to_find:
+            match_list.extend([el for el in list_to_match if isinstance(el, collections_abc.Iterable) and (m in el)])
+
+        match_list = list(dict.fromkeys(match_list))
+        return match_list
+    
+    def id_outliers_IQR(df, q1, q3, date_var, id, var, freq_var):
+        """
+        Identifies outliers creatinga dummy variable (0/1) called outlier using IQR method, where quantile value can be set
+        :param dates: dataframe, q1 and q3 values as numeric 0<x<1, date_var as string, var where we want to compute outliers as string,
+        freq_var as string such as month or day
+        :return: a Pandas dataframe
+        """
+        ### Removing negative values, since energy consumption can be only positive
+        df = df.loc[df[var]>0, ].copy()
+        
+        if isinstance(id, 'list'):
+            list_id = id + [var, freq_var]
+        else:
+            list_id = [id, var, freq_var]    
+              
+        # Freq var
+        df.loc[:, freq_var] = df.loc[:, date_var].apply(lambda x: x.month)
+        
+        ### ID outliers
+        grouped = df.loc[:, list_id].groupby(list_id)
+        df_q1 = grouped.quantile(q1).reset_index()
+        df_q1.rename(columns={var: 'q1'}, inplace=True)
+        df_q3 = grouped.quantile(q3).reset_index()
+        df_q3.rename(columns={var: 'q3'}, inplace=True)
+        
+        # Merge
+        dfs = [df, df_q1, df_q3]
+        df_outliers = reduce(lambda left,right: pd.merge(left,right,how='left', on=list_id, validate='m:1'), dfs)
+       
+        df_outliers.loc[:, 'IQR'] = df_outliers.q3 - df_outliers.q1
+        df_outliers.loc[:, 'outlier'] = 0
+        df_outliers.loc[((df_outliers[var]<(df_outliers.q1-1.5*df_outliers.IQR)) | (df_outliers[var]>(df_outliers.q3+1.5*df_outliers.IQR))), 'outlier']= 1
+        var_cleaned = var + '_cleaned'
+        df_outliers.loc[:, var_cleaned] = df_outliers.loc[:, var]
+        df_outliers.loc[df_outliers.outlier==1, var_cleaned] = np.nan
+
+        # Summarizing outliers in a pivot table
+        pivot_sum = pd.pivot_table(df_outliers, values='outlier', index=list_id, aggfunc=sum).reset_index()
+        pivot_len = pd.pivot_table(df_outliers, values='outlier', index=list_id, aggfunc=len).reset_index()
+        pivot_len.rename(columns={'outlier': 'obs'}, inplace=True)
+        pivot = pd.merge(pivot_sum, pivot_len, on=list_id, how='inner', validate='1:1')
+        pivot.loc[:, 'outliers_perc'] =  round(pivot.outlier / pivot.obs,2)
+
+        dict_outliers = {'df_outliers': df_outliers, 'pivot_outliers': pivot}
+        return dict_outliers
         
    
     

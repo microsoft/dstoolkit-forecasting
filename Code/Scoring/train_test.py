@@ -70,7 +70,7 @@ class TrainTest:
         print('Train end date is', train_end_date)
 
         ### Slicing by observation
-        df_sliced = df.loc[(df.loc[:, date_var]>=train_start_date) & (df.loc[:, date_var]<=train_end_date), ].reset_index(drop=True)
+        df_sliced = df.loc[(~df.loc[:, y].isnull()) & (df.loc[:, date_var]>=train_start_date) & (df.loc[:, date_var]<=train_end_date), ].reset_index(drop=True)
         print('Train shape before removing nan is', df_sliced.shape[0])
         
         # Removing additional nan

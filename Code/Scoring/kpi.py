@@ -31,21 +31,27 @@ class Kpi:
         :params: y as string, dict_train as dictionary, dict_test as dictionary, dict_models as dictionary
         :return: a dictionary
         """
-        dict_kpi = {}
+        dict_test_no_nan = {}
+        dict_test_no_nan['X_test'] = dict_test['X_test'].dropna()
+        dict_test_no_nan['y_tilda'] = dict_test['y_tilda'].dropna()
         
         # Training and forecasting
+        dict_kpi = {}
         for m in list(dict_models.keys()):  
             print('kpi for model', m)
-            model = dict_models[m]       
-            trained_model = Training.train(dict_train, model)
-            forecasted_model = Forecasting.forecast(dict_test, trained_model = trained_model)
-            y_tilda = dict_test['y_tilda'].copy()
-            y_tilda_date = Utils.find_date(y_tilda)
-            y_hat = forecasted_model['df_fcst'].copy()
-            y_hat_date = Utils.find_date(y_hat)
-            
-            df_merge = pd.merge(y_tilda, y_hat, left_on=y_tilda_date, right_on=y_hat_date, how='inner', validate='1:1')
-            mae = mean_absolute_error(df_merge[y], df_merge['fcst'])
-            dict_kpi[m] = mae
+            try:
+                model = dict_models[m]       
+                trained_model = Training.train(dict_train, model)
+                forecasted_model = Forecasting.forecast(dict_test_no_nan, trained_model = trained_model)
+                y_tilda = dict_test['y_tilda'].copy()
+                y_tilda_date = Utils.find_date(y_tilda)
+                y_hat = forecasted_model['df_fcst'].copy()
+                y_hat_date = Utils.find_date(y_hat)
+                
+                df_merge = pd.merge(y_tilda, y_hat, left_on=y_tilda_date, right_on=y_hat_date, how='inner', validate='1:1')
+                mae = mean_absolute_error(df_merge[y], df_merge['fcst'])
+                dict_kpi[m] = mae
+            except:
+                print('kpi for model', m, 'could not be computed')
 
         return dict_kpi

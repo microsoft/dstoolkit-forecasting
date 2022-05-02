@@ -1,5 +1,6 @@
 absl-py==0.11.0
 adal==1.2.5
+adjustText==0.7.3
 altair==4.1.0
 antlr4-python3-runtime==4.8
 applicationinsights==0.11.9
