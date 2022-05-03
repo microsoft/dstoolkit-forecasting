@@ -37,7 +37,7 @@ Based on their values, it is possible to identify intermittent time series as:
 - unforecastable in terms of quantity volatility
 - regular time series ​
 
-![Alt text](Docs/Images/intermittent_ts.png?raw=true "Intermittent time series")
+![Alt text](Docs/Images/intermittent_TS.png?raw=true "Intermittent time series")
 
 #### Methods to forecast intermittent time series (not yet implemented in this accelerator):​
 - Croston’s method​
@@ -63,11 +63,11 @@ Based on their values, it is possible to identify intermittent time series as:
         ![Alt text](Docs/Images/calendar.png?raw=true "Calendar time series")
 
 #### Methods to forecast regular time series
-- Linear regression (implemented)
-- Gradient boosting (implemented)
-- Random Forest (implemented)
-- ARIMA
-- Prophet
+|#    | Model | Library   | Status | Notes |
+| :---        |    :----:   |          ---: |  ---: |---: |
+| 1 | Linear regression      | [statsmodel](https://www.statsmodels.org/stable/api.html#univariate-time-series-analysis)     |Implemented    |  |
+| 2 | Gradient boosting      | [xgboost](https://xgboost.readthedocs.io/en/stable/)     |Implemented    |  |
+| 3 | Random Forest      | [statsmodel](https://www.statsmodels.org/stable/api.html#univariate-time-series-analysis)     |Implemented    |  |
 
 ## References: ​
 Lancaster Centre For Marketing Analytics and Forecasting ​(https://www.lancaster.ac.uk/lums/research/areas-of-expertise/centre-for-marketing-analytics-and-forecasting/)
