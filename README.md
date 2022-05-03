@@ -67,22 +67,22 @@ Based on their values, it is possible to identify intermittent time series as:
 | :---        |    :----:   |          ---: |  ---: |---: |
 | 1 | Linear regression      | [statsmodel](https://www.statsmodels.org/stable/api.html#univariate-time-series-analysis)     |Implemented    |  |
 | 2 | Gradient boosting      | [xgboost](https://xgboost.readthedocs.io/en/stable/)     |Implemented    |  |
-| 3 | Random Forest      | [statsmodel](https://www.statsmodels.org/stable/api.html#univariate-time-series-analysis)     |Implemented    |  |
+| 3 | Random forest      | [statsmodel](https://www.statsmodels.org/stable/api.html#univariate-time-series-analysis)     |Implemented    |  |
 | 4 | Kats |[Kats](https://facebookresearch.github.io/Kats/api/) |Not yet tmplemented    |  |
 | 5 | Prophet | [Prophet](https://facebook.github.io/prophet/docs/quick_start.html#python-api)|Not yet implemented    |Decompose into trend + season + holiday, etc |
-| 6 |Neural Networks|[Neural prophet](https://neuralprophet.com/html/index.html) |Not yet implemented    |  |
-| 7 ||[PyFlux](https://github.com/RJT1990/pyflux) |Not yet implemented    |  |
-| 8||[Sktime](https://www.sktime.org/en/stable/) |Not yet implemented    |  |
-| 9||[AutoTimeSeries](https://github.com/AutoViML/Auto_TS) |Not yet implemented    |  |
-| 10 ||[TimeSynth](https://github.com/TimeSynth/TimeSynth) |Not yet implemented    |  |
-| 11 ||[Tsfresh](https://github.com/blue-yonder/tsfresh) |Not yet implemented    |  |
-| 12 ||[Darts](https://github.com/unit8co/darts) |Not yet implemented    |  |
-| 13 ||[Orbit](https://github.com/uber/orbit) |Not yet implemented    | pystan backend |
-| 14 ||[Arrow](https://github.com/pastas/pastas) |Not yet implemented    |  |
-| 15 ||[Pastas](https://github.com/pastas/pastas) |Not yet implemented    |  |
-| 16||[Flow forecast](https://github.com/AIStream-Peelout/flow-forecast) |Not yet implemented    |  |
-| 17 ||[AutoML in Azure ML](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-auto-train#supported-models) |Not yet implemented    |  |
-| 18 | | [Metaflow](https://docs.metaflow.org/introduction/what-is-metaflow) |Not yet implemented    |  |
+| 6 |Neural networks|[Neural prophet](https://neuralprophet.com/html/index.html) |Not yet implemented    |  |
+| 7 |Probabilistic model|[PyFlux](https://github.com/RJT1990/pyflux) |Not yet implemented    |  |
+| 8|Scikit-learn wrapper|[Sktime](https://www.sktime.org/en/stable/) |Not yet implemented    |  |
+| 9|Automatic time series|[AutoTimeSeries](https://github.com/AutoViML/Auto_TS) |Not yet implemented    |  |
+| 10 |Create synthetic time series for model testing|[TimeSynth](https://github.com/TimeSynth/TimeSynth) |Not yet implemented    |  |
+| 11 |Computes series characteristics|[Tsfresh](https://github.com/blue-yonder/tsfresh) |Not yet implemented    |  |
+| 12 |ARIMA and deep NN|[Darts](https://github.com/unit8co/darts) |Not yet implemented    |  |
+| 13 |Uber forecasting package|[Orbit](https://github.com/uber/orbit) |Not yet implemented    | pystan backend |
+| 14 |Converting dates|[Arrow](https://github.com/pastas/pastas) |Not yet implemented    |  |
+| 15 |Hydro(geo)logical time series analysis|[Pastas](https://github.com/pastas/pastas) |Not yet implemented    |  |
+| 16|Deep learning|[Flow forecast](https://github.com/AIStream-Peelout/flow-forecast) |Not yet implemented    |  |
+| 17 |Automating iterative tasks of machine learning model development|[AutoML in Azure ML](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-auto-train#supported-models) |Not yet implemented    |  |
+| 18 |Netflix forecasting package | [Metaflow](https://docs.metaflow.org/introduction/what-is-metaflow) |Not yet implemented    |  |
 
 
 ## References: ​
