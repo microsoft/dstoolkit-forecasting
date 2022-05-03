@@ -68,6 +68,22 @@ Based on their values, it is possible to identify intermittent time series as:
 | 1 | Linear regression      | [statsmodel](https://www.statsmodels.org/stable/api.html#univariate-time-series-analysis)     |Implemented    |  |
 | 2 | Gradient boosting      | [xgboost](https://xgboost.readthedocs.io/en/stable/)     |Implemented    |  |
 | 3 | Random Forest      | [statsmodel](https://www.statsmodels.org/stable/api.html#univariate-time-series-analysis)     |Implemented    |  |
+| 4 | Kats |[Kats](https://facebookresearch.github.io/Kats/api/) |Not yet tmplemented    |  |
+| 5 | Prophet | [Prophet](https://facebook.github.io/prophet/docs/quick_start.html#python-api)|Not yet implemented    |Decompose into trend + season + holiday, etc |
+| 6 |Neural Networks|[Neural prophet](https://neuralprophet.com/html/index.html) |Not yet implemented    |  |
+| 7 ||[PyFlux](https://github.com/RJT1990/pyflux) |Not yet implemented    |  |
+| 8||[Sktime](https://www.sktime.org/en/stable/) |Not yet implemented    |  |
+| 9||[AutoTimeSeries](https://github.com/AutoViML/Auto_TS) |Not yet implemented    |  |
+| 10 ||[TimeSynth](https://github.com/TimeSynth/TimeSynth) |Not yet implemented    |  |
+| 11 ||[Tsfresh](https://github.com/blue-yonder/tsfresh) |Not yet implemented    |  |
+| 12 ||[Darts](https://github.com/unit8co/darts) |Not yet implemented    |  |
+| 13 ||[Orbit](https://github.com/uber/orbit) |Not yet implemented    | pystan backend |
+| 14 ||[Arrow](https://github.com/pastas/pastas) |Not yet implemented    |  |
+| 15 ||[Pastas](https://github.com/pastas/pastas) |Not yet implemented    |  |
+| 16||[Flow forecast](https://github.com/AIStream-Peelout/flow-forecast) |Not yet implemented    |  |
+| 17 ||[AutoML in Azure ML](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-auto-train#supported-models) |Not yet implemented    |  |
+| 18 | | [Metaflow](https://docs.metaflow.org/introduction/what-is-metaflow) |Not yet implemented    |  |
+
 
 ## References: ​
 Lancaster Centre For Marketing Analytics and Forecasting ​(https://www.lancaster.ac.uk/lums/research/areas-of-expertise/centre-for-marketing-analytics-and-forecasting/)
