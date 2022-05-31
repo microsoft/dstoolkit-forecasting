@@ -206,7 +206,7 @@ class Utils:
         """
         Resample the data to a particular frequency
         :params: df as pandas dataframe, id as string, date_var as string, 
-            sampling as string of frequency and dict_grouping as dictionary
+            sampling as string of frequency and dict_grouping as dictionary as {variable_to_resample: 'function_to_apply'}
         :return: a Pandas dataframe
         """
          
@@ -327,25 +327,85 @@ class Utils:
         return df_seq
     
     def check_length_time_serie(df, date_var, index):
+        """
+        Checks the length that a time sequence of completes date/hours should have, so that it can be compared 
+        with actual observation
+        :params: df as pandas dataframe, date_var as string, index as list as groupby variable
+        :return: a Pandas dataframe
+        """       
         freq = pd.Series(df[date_var].unique()).dt.freq
         pivot = pd.pivot_table(df, index=index, values=date_var, aggfunc=['count', 'min', 'max']).reset_index()
         pivot.columns = pivot.columns.get_level_values(0)
         pivot.loc[:, 'td'] = pivot.loc[:, 'max'].max() - pivot.loc[:, 'min'].min()
+        pivot.loc[:, 'count'] = pivot.loc[:, 'count'].astype(float)
+        
         if freq=='H':
             pivot.loc[:, 'freq'] = 'H'
             pivot.loc[:, 'expected_obs'] = pivot.loc[:, 'td'].apply(lambda x: x.days*24) + pivot.loc[:, 'td'].apply(lambda x: x.seconds/3600) + 1
+            pivot.loc[:, 'mismatch'] = 0
+            pivot.loc[pivot['count']!=pivot['expected_obs'], 'mismatch'] = 1
+            if sum(pivot.mismatch)>0:
+                print('Expected length of sequence is NOT OK \n', pivot[[index, 'count', 'expected_obs']].drop_duplicates())
+            else:
+                print('Expected length of sequence is OK \n', pivot[[index, 'count', 'expected_obs']].drop_duplicates())
+
         elif freq=='D':
             pivot.loc[:, 'freq'] = 'D'
             pivot.loc[:, 'expected_obs'] = pivot.loc[:, 'td'].apply(lambda x: x.days) + pivot.loc[:, 'td'].apply(lambda x: x.seconds/3600*24) + 1
+            pivot.loc[:, 'mismatch'] = 0
+            pivot.loc[pivot['count']!=pivot['expected_obs'], 'mismatch'] = 1
+            if sum(pivot.mismatch)>0:
+                print('Expected length of sequence is NOT OK \n', pivot[[index, 'count', 'expected_obs']].drop_duplicates())
+            else:
+                print('Expected length of sequence is OK \n', pivot[[index, 'count', 'expected_obs']].drop_duplicates())
+                
         else:
             pivot.loc[:, 'freq'] = np.nan
             pivot.loc[:, 'expected_obs'] = np.nan
             print('check_length_time_serie: could not infer frequency')
 
-        print('Expected length of sequence:', pivot)
+
         return pivot
     
+    def check_regressors_availability(df, date_var, regressors_list, forecast_end_date):
+        """
+        Checks the availability of regressors based on forecast end date
+        :params: df as pandas dataframe, date_var as string, regressors_list as list and forecast_end_date as string in format "2022-12-31"
+        :return: None
+        """       
+        forecast_end_date = pd.to_datetime(forecast_end_date, dayfirst = False)
+
+        for r in regressors_list:
+            if any(df.loc[df[date_var]<=forecast_end_date, r].isnull()):
+                print('Latest filled available date for regressor', r, 'is', df.loc[df[r].isnull()==False, date_var].max(), '\n expected is', forecast_end_date)
+                raise Exception('Regressor', r, 'shows null values <= forecast_end_date. \n Please, fill them before going on')
+            else:
+                print('Regressor', r, 'has all needed values')
+        return None
+    
+    def remove_regressors_with_nan(df, date_var, regressors_list, forecast_end_date):
+        """
+        Remove regressors with nan based on forecast end date
+        :params: df as pandas dataframe, date_var as string, regressors_list as list and forecast_end_date as string in format "2022-12-31"
+        :return: pandas dataframe
+        """       
+        forecast_end_date = pd.to_datetime(forecast_end_date, dayfirst = False)
+        
+        for r in regressors_list:
+            if any(df.loc[df[date_var]<=forecast_end_date, r].isnull()):
+                print('Latest filled available date for regressor', r, 'is', df.loc[df[r].isnull()==False, date_var].max(), '\n expected is', forecast_end_date)
+                print('Regressor', r, 'shows null values <= forecast_end_date. \n Regressor REMOVED')
+                df.drop(columns = r, inplace=True)
+            else:
+                print('Regressor', r, 'has all needed values')
+        return df
+            
     def match_to_find(serie_to_find):
+        """
+        Finds a match in a list of possible words to match
+        :params: serie_to_find as a list of words to match
+        :return: a list
+        """
         match_to_find = []
         match_to_find = match_to_find + [serie_to_find]
         match_to_find = match_to_find + [serie_to_find.lower()]
@@ -434,5 +494,167 @@ class Utils:
         return dict_outliers
         
    
+class AlphabeticalCombinations:
+    def write_neat_csv(saving_file, df_fcst):
+        """
+        Writes neat csv
+        :params: saving_file as string, df_fcst as dataframe to write
+        :return: None
+        """
+        df_fcst.to_csv(saving_file, sep=';', date_format="%Y-%m-%d %H:%M:%S", header=True, index=False, compression='infer', quoting=None, quotechar='"', doublequote=False, decimal='.')
+               
+        return(print('*** write_neat_csv: completed', saving_file))       
     
-   
+    def convert(string):
+        """
+        Convert string to list
+        :params: string
+        :return: a list
+        """
+        list1=[]
+        list1[:0]=string
+        return list1
+
+    def excel_columns():
+        """
+        Counts excel columns
+        :params: none
+        :return: a list
+        """
+        alphabet_string = string.ascii_uppercase
+        li = AlphabeticalCombinations.convert(alphabet_string)
+        excel_columns = [letter for letter in alphabet_string]
+        for L in li:
+            aces = [L + li for li in li]
+            excel_columns.extend(aces)
+
+        return excel_columns
+
+    def write_beautiful_excel(saving_file, dict_df_to_write):
+        """
+        Writes beautiful excel
+        :params: saving_file as string, dict_df_to_write as dictionary with dict key as sheet name and dict value as data
+        :return: None
+        """
+        ### Writing to Excel
+        writer = pd.ExcelWriter(saving_file, engine='xlsxwriter', datetime_format='dd/mm/yyyy hh:mm:ss', date_format='dd/mm/yyyy')
+        
+        # FCST
+        for d in list(dict_df_to_write.keys()):
+            df = dict_df_to_write[d]
+            df.to_excel(writer, sheet_name=d, index=False)
+
+            # Make handles for workbook/sheet
+            workbook = writer.book
+            worksheet = writer.sheets[d]
+
+            # Create positive/negative cell format
+            format_simone = workbook.add_format({'num_format': '#,##0;- #,##0'})
+            format_percentage = workbook.add_format({'num_format': '0.00%'})
+
+            # Identify percentage columns
+            cols_percentage = []
+            for c in list(df.columns):
+                try:
+                    if any(df[c]>=1) and any(df[c]>=0) and any(df[c].between(0, 1, inclusive=False)):
+                        cols_percentage.extend([c])
+                except:
+                    pass
+
+            # Define the worksheet range to apply number format
+            cols = AlphabeticalCombinations.excel_columns()
+            row = len(df)
+            format_range = '{}{}:{}{}'.format(cols[0], row, cols[len(df.columns)-1], row)
+
+            # Apply number formats to specified range
+            worksheet.set_column(format_range, None, format_simone)
+
+            if len(cols_percentage)>0:
+                for f in cols_percentage:
+                    n = list(df.columns).index(f)
+                    row = len(df)
+                    format_range = '{}{}:{}{}'.format(cols[n], row, cols[n], row)
+                    worksheet.set_column(format_range, None, format_percentage)
+
+            #Iterate through each column and set the width == the max length in that column. A padding length of 2 is also added.
+            for i, col in enumerate(df.columns):
+                # find length of column i
+                column_len = df[col].astype(str).str.len().max()
+                # Setting the length if the column header is larger
+                # than the max column value length
+                column_len = max(column_len, len(col)) + 4
+                # set the column length
+                worksheet.set_column(i, i, column_len)
+
+        ## Close the Pandas Excel writer and output the Excel file
+        writer.save()
+        return(print('*** write_beatiful_excel: completed', saving_file))
+
+    def write_beautiful_excel_table(saving_file, dict_df_to_write):
+        """
+        Writes beautiful excel tables
+        :params: saving_file as string, dict_df_to_write as dictionary with dict key as sheet name and dict value as data
+        :return: None
+        """
+        ### Writing to Excel
+        writer = pd.ExcelWriter(saving_file, engine='xlsxwriter', datetime_format='dd/mm/yyyy hh:mm:ss', date_format='dd/mm/yyyy')
+
+        # FCST
+        for d in list(dict_df_to_write.keys()):
+            df = dict_df_to_write[d]
+            df.to_excel(writer, sheet_name=d, index=False)
+
+            # Make handles for workbook/sheet
+            workbook = writer.book
+            worksheet = writer.sheets[d]
+
+            # Create positive/negative cell format
+            format_simone = workbook.add_format({'num_format': '#,##0;- #,##0'})
+            format_percentage = workbook.add_format({'num_format': '0.00%'})
+
+            # Identify percentage columns
+            cols_percentage = []
+            for c in list(df.columns):
+                try:
+                    if any(df[c]>=1) and any(df[c]>=0) and any(df[c].between(0, 1, inclusive=False)):
+                        cols_percentage.extend([c])
+                except:
+                    pass
+
+            # Define the worksheet range to apply number format
+            cols = AlphabeticalCombinations.excel_columns()
+            row = len(df)
+            format_range = '{}{}:{}{}'.format(cols[0], row, cols[len(df.columns)-1], row)
+
+            # Apply number formats to specified range
+            worksheet.set_column(format_range, None, format_simone)
+
+            if len(cols_percentage)>0:
+                for f in cols_percentage:
+                    n = list(df.columns).index(f)
+                    row = len(df)
+                    format_range = '{}{}:{}{}'.format(cols[n], row, cols[n], row)
+                    worksheet.set_column(format_range, None, format_percentage)
+
+            #Iterate through each column and set the width == the max length in that column. A padding length of 2 is also added.
+            for i, col in enumerate(df.columns):
+                # find length of column i
+                column_len = df[col].astype(str).str.len().max()
+                # Setting the length if the column header is larger
+                # than the max column value length
+                column_len = max(column_len, len(col)) + 4
+                # set the column length
+                worksheet.set_column(i, i, column_len)
+
+            # Create a list of column headers, to use in add_table().
+            column_settings = []
+            for header in df.columns:
+                column_settings.append({'header': header})
+
+            # Add the table.
+            worksheet.add_table(0, 0, df.shape[0], df.shape[1] - 1, {'columns': column_settings})
+
+        ## Close the Pandas Excel writer and output the Excel file
+        writer.save()
+        return(print('*** write_beatiful_excel: completed', saving_file))
+    

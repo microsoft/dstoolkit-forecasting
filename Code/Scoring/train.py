@@ -44,16 +44,7 @@ class Training:
         print('Training completed')
         return trained_model
     
-    def call_training_function(func, *args):
-        """        
-        Calls training function       
-        :params: func as function name, *args as dictionary of arguments of the function
-        :return: the result of the function
-        """
-        from Code.Scoring.train import Training
-        func_dict = {'xgboost': Training.train_xgboost, 'xgboost_length_ts': Training.train_xgboost_length_ts, 'xgboost_seasons': Training.train_xgboost_seasons}
-        result = func_dict.get(func)(*args)
-        return result
+
         
 
     

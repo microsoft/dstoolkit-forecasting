@@ -52,13 +52,3 @@ class Forecasting:
         print('Forecasting completed')
         return forecasted_model
     
-    def call_forecasting_function(func, *args):
-        """        
-        Calls forecasting function       
-        :params: func as function name, *args as dictionary of arguments of the function
-        :return: the result of the function
-        """
-        from Code.Scoring.forecast import Forecasting
-        func_dict = {'xgboost': Forecasting.forecast_xgboost, 'xgboost_length_ts': Forecasting.forecast_xgboost_length_ts, 'xgboost_seasons': Forecasting.forecast_xgboost_seasons}
-        result = func_dict.get(func)(*args)
-        return result

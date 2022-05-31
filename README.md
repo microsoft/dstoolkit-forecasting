@@ -145,6 +145,276 @@ A notebook that performs a k-means flat cluster analysis on those time series th
 ### 5. EnergyPredictionScoring
 A notebook that helps you produce a forecast, plotting the results and compute KPIs on a panel dataframe, where you have multiple timeseries identified by a given id (e.g. multiple sensors time series, multiple plants or site-id energy consumption, etc)
 
+# Functions
+Functions are available in the Code folder.
+
+## Plotting
+### Class Plots
+```bash
+sliding_line_plot(df, serie_to_plot, id, i, chart_title="")
+```
+Creates a sliding time series chart
+
+```bash
+sliding_fcst_plot(df, predict_col, expected_values, chart_title="", kpi=True)
+```
+Creates a forecast vs actual sliding time series chart, with KPI option
+
+## Regressors
+### Class Regressors
+```bash  
+create_interactions(df, var1, var2)
+```
+Adds interaction terms between two variables as var1*var2 to dataframe
+
+```bash  
+create_non_linear_terms(df, var, n)
+```
+Adds non linear terms as var^2 to dataframe
+
+```bash  
+add_holidays_by_country(df, date_var, country)
+```
+Adds holidays a dummy variable (0/1) to dataframe
+
+```bash  
+add_weekdays(df, date_var)
+```
+Adds weekdays a dummy variables (0/1) for each weekday to dataframe
+
+```bash  
+add_months(df, date_var)
+```
+Adds months a dummy variables (0/1) for each month to dataframe
+
+```bash  
+calculate_degree_days(df, base_temperature, temperature)
+```
+Calculate the Degree Days Heating and Cooling values
+
+```bash  
+merge_holidays_by_date(df, df_holidays, id)
+```
+Merge Holiday df with the train df
+
+```bash  
+merge_additional_days_off(df, df_metadata, id, dict_days_off)
+```
+Merge Site Weekend data with train df
+
+```bash  
+merge_weather(df, weather, date_var, id)
+```
+Merge weather data into the train df
+
+### Class SimilarDay:
+```bash
+get_similar_days_in_previous_year(dates, country)
+```
+Retrieves the similar day for a given date
+
+```bash
+get_similar_days_in_previous_week(dates, country)
+```
+Retrieves the similar day for a given date
+
+```bash
+get_similar_day_in_previous_year(d, holiday_calendar)
+```
+Retrieves the similar day for a given date. If the given date is not an holiday, the similar day is the closest day of the previous year in terms of calendar position which shares the weekday. If such a date is an holiday, the same weekday of the week before is considered. 
+
+```bash
+get_similar_day_in_previous_week(d, holiday_calendar)
+```
+Retrieves the similar day for a given date. If the given date is not an holiday, the similar day is the closest day of the previous year in terms of calendar position which shares the weekday. If such a date is an holiday, the same weekday of the week before is considered. If the given date is an holiday, its similar day is the closest holiday to the given date in the previous year.
+
+### Class StandardConsumption:   
+```bash
+get_standard_consumption_as_mean(df, id, date_var, var, country)
+```
+Retrieves the standard consumption for a given date as hourly monthly mean differentiated by holiday, weekend, weekdays
+
+### Class Temperatures:
+```bash       
+ten_year(df, id, date_var = 'date_daily', start_date ='', end_date='31/12/2050')
+```
+Computes ten year averages temperatures and As-Is temperatures: where available use actual temp, if not use ten year averages
+
+```bash 
+get_minimum_consumption(df, date_var, var, country)
+```
+Retrieves the minimum consumption for a given date as hourly monthly minimum value differentiated by holiday, weekend, night
+
+## Scoring
+### Class Training
+```bash 
+train(dict_model_to_train, model)
+```
+Generate train
+
+### Class Forecasting
+```bash
+forecast(dict_test, trained_model)
+```
+Generate forecast
+
+### Class Scoring
+```bash 
+find_best_algorithm(y, dict_train, dict_test, dict_algorithms, out_of_sample)
+```
+Finds the best performing algorithm in terms of min mean absolute error
+
+```bash 
+stats_per_site(df, id, date_var)
+```
+Helper function to identify amount of data per site
+
+```bash 
+resample_train_data(df, date_var, id, predict_col, sampling="D")
+```
+Resample the data to a particular frequency
+
+### Class TrainTest
+```bash 
+define_train_test_set_dates(df, y, train_start_date, train_end_date, test_start_date, test_end_date, test_size=0.33)
+```
+Defines train and test dates if left blank  
+
+```bash 
+def_train(df, y, list_id, train_start_date='', train_end_date='')
+```
+Define train dataset 
+
+```bash 
+def_test(df, y, list_id, test_start_date='', test_end_date='')
+```
+Define test dataset
+
+## Kpi
+### Class Kpi
+```bash
+find_mae(y, dict_train, dict_test, dict_models):
+```
+Compute mean absolute error
+```bash
+compute_error(df, fcst, y):
+```    
+Compute error as forecast-actual
+```bash
+compute_absolute_error(df, fcst, y):
+```    
+Compute absolute error as abs(forecast-actual)
+```bash
+compute_absolute_percentage_error(df, fcst, y):
+```     
+Compute absolute % error
+```bash
+compute_mean_error(df, fcst, y):
+```      
+Compute mean  error
+```bash
+compute_mae(df, fcst, y):
+```   
+Compute mean absolute error
+```bash
+compute_mape(df, fcst, y):
+```     
+Compute mean absolute % error
+
+## Utils
+### Class Utils
+```bash
+def camel_to_snake(name)
+```
+Changes string from camel case to snake case
+```bash
+columns_camel_to_snake(df)
+```
+Changes dataframe columns from camel case to snake case
+```bash
+find_date(df)
+```
+Finds date columns in a dataframe
+```bash
+find_match_in_list(list_to_match, match_to_find):
+```
+Finds a match in a list given a list of possible words to match
+```bash
+delta_format(delta: np.timedelta64) -> str:
+```
+Identifies frequency in numpy timedelta
+```bash
+find_freq(timedelta):
+```
+Finds frequency in numpy timedelta
+```bash
+find_freq_in_dataframe(df, date_var)
+```
+Finds frequency in pandas dataframe
+```bash
+get_project_root(Path):
+```
+Finds the parent folder of the parent folder 
+```bash
+add_daily_date(df):
+```
+Adds a date variable at daily frequency to dataframe
+```bash
+find_categorical_variables(df):
+```
+Finds categorical variables in pandas dataframe
+```bash
+resample_data(df, id, date_var, sampling, dict_grouping)
+```
+Resample by aggregating the data to a particular frequency as defined in dict_grouping as{variable_to_resample: 'function_to_apply'}, i.e.{value: 'sum'}
+```bash
+add_seq(df, date_var, serie, freq, end_date='', start_date='')
+```
+Creates a sequence of completes date/hours to a dataframe
+```bash
+check_length_time_serie(df, date_var, index)
+```
+Checks the length that a time sequence of completes date/hours should have, so that it can be compared 
+with actual observation
+```bash
+match_to_find(serie_to_find)
+```
+Finds a match in a list of possible words to match
+```bash
+find_match(df, serie_name, match_to_find):
+```
+Finds a match in a dataframe serie given a list of possible words to match
+```bash
+find_match_in_list(list_to_match, match_to_find)
+```
+Finds a match in a list given a list of possible words to match
+```bash
+id_outliers_IQR(df, q1, q3, date_var, id, var, freq_var)
+```
+Identifies outliers creatinga dummy variable (0/1) called outlier using IQR method, where quantile value can be set
+        
+### Class AlphabeticalCombinations
+```bash
+write_neat_csv(saving_file, df_fcst)
+```
+Writes neat csv
+```bash        
+convert(string)
+```
+Convert string to list
+```bash
+excel_columns()
+```
+Counts excel columns
+```bash
+write_beautiful_excel(saving_file, dict_df_to_write)
+```
+Writes beautiful excel
+```bash
+write_beautiful_excel_table(saving_file, dict_df_to_write)
+```
+Writes beautiful excel tables
+
 # Contributing
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
@@ -165,4 +435,5 @@ trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
+
 

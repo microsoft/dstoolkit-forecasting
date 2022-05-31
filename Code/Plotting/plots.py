@@ -14,8 +14,6 @@ import datetime as dt
 from matplotlib import pyplot as plt
 import matplotlib.dates as mdates
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from adjustText import adjust_text
 
 # custom functions
 from Configuration.config import cfg_path
@@ -140,17 +138,14 @@ class Plots:
             
         # Add annotations
         for col in ['train_start_date', 'train_end_date', 'test_start_date', 'test_end_date']: 
-            if col in list(df.columns):
+            if col in list(df.columns) and col in ['train_end_date', 'test_end_date']:
                 col_date = pd.to_datetime(str(df[col].unique()[0])).strftime('%Y-%m-%d')
-                date_value = df[col].unique()[0]
-                unique_index = pd.Index(list(df[date].unique()))
-                closest_date = df.loc[unique_index.get_loc(date_value,method='nearest'), date]
+                closest_date = df[col].unique()[0]
                 x_value = pd.to_datetime(df.loc[df[date]==closest_date, date].reset_index(drop=True)[0], format='%Y-%m-%d') 
                 y_value = pd.to_numeric(df.loc[df[date]==closest_date, y].reset_index(drop=True)[0])
                 fig.add_annotation(
                 x=x_value, 
-                y=y_value,
-                #textangle=45,
+                y=y_value,  
                 text= col + ': ' +  str(col_date),
                 showarrow=True,
                 arrowhead=1, 
@@ -159,7 +154,41 @@ class Plots:
                 font = dict(
                 color="black",
                 size=16
-            ))
+                ))            
+            elif col in list(df.columns) and col in ['train_start_date']:
+                col_date = pd.to_datetime(str(df[col].unique()[0])).strftime('%Y-%m-%d')
+                closest_date  = df[col].unique()[0]
+                x_value = pd.to_datetime(df.loc[df[date]==closest_date, date].reset_index(drop=True)[0], format='%Y-%m-%d') 
+                y_value = pd.to_numeric(df.loc[df[date]==closest_date, y].reset_index(drop=True)[0])
+                fig.add_annotation(
+                x=x_value, 
+                y=y_value*2,  
+                text= col + ': ' +  str(col_date),
+                showarrow=True,
+                arrowhead=1, 
+                arrowsize=1,
+                arrowwidth=2,
+                font = dict(
+                color="black",
+                size=16
+                ))
+            elif col in list(df.columns) and col in ['test_start_date']:
+                col_date = pd.to_datetime(str(df[col].unique()[0])).strftime('%Y-%m-%d')
+                closest_date = df[col].unique()[0]
+                x_value = pd.to_datetime(df.loc[df[date]==closest_date, date].reset_index(drop=True)[0], format='%Y-%m-%d') 
+                y_value = pd.to_numeric(df.loc[df[date]==closest_date, y].reset_index(drop=True)[0])
+                fig.add_annotation(
+                x=x_value, 
+                y=y_value*1.5,  
+                text= col + ': ' +  str(col_date),
+                showarrow=True,
+                arrowhead=1, 
+                arrowsize=1,
+                arrowwidth=2,
+                font = dict(
+                color="black",
+                size=16
+                ))
             else:
                 print('No annotation available for', col)
 

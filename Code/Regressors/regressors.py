@@ -92,7 +92,8 @@ class Regressors:
         return df 
         
     def calculate_degree_days(df, base_temperature, temperature):
-        """Calculate the Degree Days Heating and Cooling values
+        """
+        Calculate the Degree Days Heating and Cooling values
         :params: dataframe, base temperature to start and actual temperature as string
         :return: a pandas dataframe
         """
@@ -102,7 +103,8 @@ class Regressors:
         return df
 
     def merge_holidays_by_date(df, df_holidays, id):
-        """Merge Holiday df with the train df
+        """
+        Merge Holiday df with the train df
         :params: df as dataframe, df_holidays as df containing info on holidays, id as string
         :return: a pandas dataframe
         """
@@ -124,7 +126,8 @@ class Regressors:
         return df
 
     def merge_additional_days_off(df, df_metadata, id, dict_days_off):
-        """Merge Site Weekend data with train df
+        """
+        Merge Site Weekend data with train df
         :params: df as dataframe, df_metadata as df containing additional info, id as string, dict_days_off as dictionary 
         :return: a pandas dataframe
         """
@@ -142,7 +145,8 @@ class Regressors:
         return df
 
     def merge_weather(df, weather, date_var, id):
-        """Merge weather data into the train df
+        """
+        Merge weather data into the train df
         :params: df as dataframe, weather as dataframe with weather info, date_var as string, id as string
         :return: a pandas dataframe
         
