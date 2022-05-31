@@ -18,6 +18,7 @@ import plotly.graph_objects as go
 # custom functions
 from Configuration.config import cfg_path
 from Code.Utils.utils import Utils
+from Code.Scoring.kpi import Kpi
 
 class Plots:
                 
@@ -111,7 +112,7 @@ class Plots:
         ## Checking KPI
         if kpi == True:
             try:
-                mape = str(round(df.loc[~df.absolute_percentage_error.isnull(), 'absolute_percentage_error'].mean()*100, 2))
+                mape = str(round(Kpi.compute_mape(df, 'fcst', y), 2)*100)
                 min_mape_date = min(df.loc[~df.absolute_percentage_error.isnull(), date]).strftime("%d-%m-%Y")
                 max_mape_date = max(df.loc[~df.absolute_percentage_error.isnull(), date]).strftime("%d-%m-%Y")
                 chart_title = chart_title + ' - MAPE: ' +  mape + "% from " + min_mape_date + ' to ' + max_mape_date

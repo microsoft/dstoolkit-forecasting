@@ -1,3 +1,4 @@
 Data/
-**/_pycache__
+__pycache__
+**/__pycache__
 *.pyc

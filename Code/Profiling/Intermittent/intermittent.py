@@ -44,7 +44,7 @@ class Intermittent:
         sddi = np.std(winsorized_array)
         return sddi
     
-    def idclass3(vect, threshold, perc, quant, highest, lowest):
+    def compute_indicator_values(vect, threshold, perc, quant, highest, lowest):
         ''' Computes indicator values
         :params: vect as numpy array, threshold as numeric, perc as numeric, quant as numeric, highest and lowest as scalars 0<=x<=1 as winsorization percentages
         :return: a dictionary
@@ -97,8 +97,8 @@ class Intermittent:
         
         return res
     
-    def enh_idclass5(vect, threshold, perc, quant, highest, lowest):   
-        ''' Computes indicator values
+    def enh_compute_indicator_values(vect, threshold, perc, quant, highest, lowest):   
+        ''' Computes indicator values (enhanced)
         :params: vect as numpy array, threshold as numeric, perc as numeric, quant as numeric, highest and lowest as scalars 0<=x<=1 as winsorization percentages
         :return: a dictionary
         '''    
@@ -263,4 +263,10 @@ class Intermittent:
         df_profiling = pd.concat([df_regular, df_constant_zero, df_constant, df_intermittent, df_lumpy, df_erratic, df_unforecastable_time, df_unforecastable_quantity], axis=0)
         
         return df_profiling
+    
+    def call_intermittent_function(func, *args):
+        from Code.Profiling.Intermittent.intermittent import Intermittent
+        func_dict = {'enh_compute_indicator_values': Intermittent.enh_compute_indicator_values, 'compute_indicator_values': Intermittent.compute_indicator_values}
+        result = func_dict.get(func)(*args)
+        return result
 

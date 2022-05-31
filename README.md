@@ -160,6 +160,40 @@ sliding_fcst_plot(df, predict_col, expected_values, chart_title="", kpi=True)
 ```
 Creates a forecast vs actual sliding time series chart, with KPI option
 
+
+## Profiling
+### Class Intermittent
+```bash  
+cv2_by_group(df, y, grouping_var, highest=0.05, lowest=0.05):
+```
+Computes cv2 by group
+```bash  
+cv2(array, highest=0.05, lowest=0.05):
+```
+Winsorization is the process of replacing the extreme values of statistical data in order to limit 
+        the effect of the outliers on the calculations or the results obtained by using that data. 
+        The mean value calculated after such replacement of the extreme values is called winsorized mean.
+```bash  
+adi(array, highest=0.05, lowest=0.05):
+```
+Winsorization is the process of replacing the extreme values of statistical data in order to limit 
+        the effect of the outliers on the calculations or the results obtained by using that data. 
+        The mean value calculated after such replacement of the extreme values is called winsorized mean.
+```bash  
+sddi(array, highest=0.05, lowest=0.05):
+```
+Winsorization is the process of replacing the extreme values of statistical data in order to limit 
+        the effect of the outliers on the calculations or the results obtained by using that data. 
+        The mean value calculated after such replacement of the extreme values is called winsorized mean.
+```bash  
+compute_indicator_values(vect, threshold, perc, quant, highest, lowest):
+```
+Computes indicator values
+```bash  
+enh_compute_indicator_values(vect, threshold, perc, quant, highest, lowest):   
+```
+Computes indicator values (enhanced)
+
 ## Regressors
 ### Class Regressors
 ```bash  
@@ -351,6 +385,10 @@ Finds frequency in numpy timedelta
 find_freq_in_dataframe(df, date_var)
 ```
 Finds frequency in pandas dataframe
+```bash
+create_folder_tree(folder_name)
+```
+creates folder tree
 ```bash
 get_project_root(Path):
 ```

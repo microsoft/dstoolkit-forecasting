@@ -34,12 +34,9 @@ class TrainTest:
         else:
             test_end_date = pd.to_datetime(test_end_date, format='%Y-%m-%d')
             
-        if (test_start_date=='') & (min_test_start_date>max_train_end_date):
-            offset_date = pd.to_datetime(test_end_date, format='%Y-%m-%d') - pd.DateOffset(n = round(len(range)*test_size, 0) )
-            test_start_date = min([offset_date, min_test_start_date])
-            #test_start_date = (pd.to_datetime(test_end_date, format='%Y-%m-%d') - offset_date).strftime('%Y-%m-%d')
-        elif (test_start_date==''):
-            test_start_date = min_train_start_date
+        if test_start_date=='':
+            offset_date = pd.to_datetime(max_train_end_date, format='%Y-%m-%d') - pd.DateOffset(n = round(len(range)*test_size, 0) )            
+            test_start_date = offset_date
         else:
             test_start_date = pd.to_datetime(test_start_date, format='%Y-%m-%d')
             
@@ -50,7 +47,7 @@ class TrainTest:
             train_start_date = pd.to_datetime(train_start_date, format='%Y-%m-%d')
             
         if train_end_date=='':
-            train_end_date = max_train_end_date
+            train_end_date = test_start_date - pd.DateOffset(n = 1) 
         else:
             train_end_date = pd.to_datetime(train_end_date, format='%Y-%m-%d')
             

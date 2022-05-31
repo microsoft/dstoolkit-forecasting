@@ -133,6 +133,15 @@ class Utils:
         :return: Path
         """
         return Path(__file__).parent.parent
+    
+    def create_folder_tree(folder_name):                
+        try:
+            os.makedirs(os.path.join(folder_name))
+        except OSError:
+            print("Creation of the directory failed or already present", folder_name)
+        else:
+            print("Successfully created the directory", folder_name)
+        return
 
     def add_daily_date(df):
         """
