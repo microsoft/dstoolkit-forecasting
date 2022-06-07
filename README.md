@@ -109,7 +109,7 @@ data_dir:
   plot_path: "Data/Plots"
 
 4. Create your input, output and plot path 
-5. Load the test dataset from Kaggle (https://www.kaggle.com/arashnic/building-sites-power-consumption-dataset/download"), unzip it and save it in your input folder
+5. Load the test dataset from [Kaggle](https://www.kaggle.com/arashnic/building-sites-power-consumption-dataset/download), unzip it and save it in your input folder
 
 ## Default Directory Structure
 
