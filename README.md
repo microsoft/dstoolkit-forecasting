@@ -25,17 +25,23 @@ Definition of intermittent time series: intermittent time series or demand comes
 
 #### How to identify intermittent time series:​
 Compute the following indicators such as
-1. ​Average Inter-demand Interval (ADI), this parameter is period based which is calculated as average interval time between two demand occurrences​
-2. Coefficient of Variation Squared (CV2), this statistical parameter is calculated as standard deviation of the *For correspondence demand divided by the average demand for non-zero demand periods. The squared coefficient of variation represents variability of demand size.​
-3. Standard Deviation of Inter-demand Interval (SDDI) ​
+1. ​Average Inter-demand Interval `ADI`: this parameter is period based which is calculated as average interval time between two demand occurrences​
+2. Coefficient of Variation Squared `CV2`: this statistical parameter is calculated as standard deviation of the *For correspondence demand divided by the average demand for non-zero demand periods. The squared coefficient of variation represents variability of demand size.​
+3. Standard Deviation of Inter-demand Interval: `SDDI`
 
-Based on their values, it is possible to identify intermittent time series as:
-- intermittent
-- lumpy
-- erratic
-- unforecastable in terms of time volatility
-- unforecastable in terms of quantity volatility
-- regular time series ​
+Based on their values, it is possible to identify intermittent time series like `intermittent`, `lumpy`, `erratic`, `unforecastable in terms of time volatility`, `unforecastable in terms of quantity volatility` and `regular time series`
+
+This is a guideline to interpret the clustering profile, and the following matrix can be used to support for interpretation and understanding of the profiles:
+
+| Type of timeseries data |  ADI    | CV2     | SDDI |
+| ----------------------- |---------|---------|------|
+| Intermittent            |  High   | Low     | Low  |
+| lumpy                   |  High   | High    | Low  |
+| erratic                 |  Low    | High    | Low  |
+| unforecastable time     |  High   | ---     | High |
+| unforecastable quantity |  Low    | ---     | High |
+| regular                 |  Low    | Low     | Low  |
+
 
 ![Alt text](Docs/Images/intermittent_TS.png?raw=true "Intermittent time series")
 
