@@ -5,7 +5,6 @@ import glob
 # data elaboration functions
 import numpy as np
 import pandas as pd
-from openpyxl import load_workbook
 
 # datetime functions
 import datetime as dt

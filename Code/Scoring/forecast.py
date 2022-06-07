@@ -6,7 +6,6 @@ from pyexpat.errors import XML_ERROR_UNEXPECTED_STATE
 # data elaboration functions
 import numpy as np
 import pandas as pd
-from openpyxl import load_workbook
 import re
 import pickle
 

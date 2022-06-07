@@ -1,6 +1,5 @@
 
 # data elaboration functions
-from attr import validate
 import pandas as pd
 from six.moves import collections_abc
 import string
@@ -12,7 +11,6 @@ import datetime as dt
 # file management functions
 import os
 import sys
-import opendatasets as od
 import pickle
 from pathlib import Path
 

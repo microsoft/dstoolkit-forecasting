@@ -11,7 +11,6 @@ import datetime as dt
 # file management functions
 import os
 import sys
-import opendatasets as od
 import pickle
 from pathlib import Path
 
