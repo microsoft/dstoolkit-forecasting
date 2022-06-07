@@ -53,7 +53,7 @@ If you have a **single time series** it can be thought of as special cases of pa
 - Filling missing data using similar days or similar weeks values 
 - Compute errors like mean absolute error and mean absolute percentage error (also in case of zero dividend...)
 - Wrap up results in tidy Excel or csv files
-3. If you have several time series to forecast, thanks to the **Profiling** module it allows you to quickly understand how "difficult" to forecast are the time series you are dealing with by classifying time series as intermittent or regular. If it is the first case you know you might have troblues with accuracy, while if it is the latter you know you can relax a bit more. This is crucial to drive the right customer expectations on the forecast accuracy. Profiling also helps you accelerating the production of forecast when dealing with high numbers of time series to forecast (from >10 up to >1000): by grouping time series by identifying for example 2 intermittent + 4 regular consumption profiles, you can develop 6 models and apply them to all your time series by category, reducing work load while increasing accuracy
+3. If you have several time series to forecast, thanks to the **Profiling** module it allows you to quickly understand how "difficult" to forecast are the time series you are dealing with by classifying time series as intermittent or regular. If it is the first case you know you might have troblues with accuracy, while if it is the latter you know you can relax a bit more. This is crucial to drive the right customer expectations on the forecast accuracy. Profiling also helps you accelerating the production of forecast when dealing with high numbers of time series to forecast (from >10 up to >100): by grouping time series by identifying for example 2 intermittent + 4 regular consumption profiles, you can develop 6 models and apply them to all your time series by category, reducing work load while increasing accuracy
 4. It helps you to quickly run backtesting with multiple models, choosing the best in terms of mean absolute error
 
 ## How to use this accelerator as guideline
@@ -140,12 +140,8 @@ Parameters for electricity consumption in KWh/hourly data:
   - thres_sddi = 6.2
   - min_time_cons = 2
 
-Parameters for insurance claims in USD/daily data:
-  - thres_cv2_constant = 0.01
-  - thres_cv2 = 0.2
-  - thres_adi = 1.2
-  - thres_sddi = 6.2
-  - min_time_cons = 20
+##### What if I am working with data that are not related to energy consumption?
+You can still use the accelerator and the profiler, but you need to setup new intermittent indicators. To do so, create a copy of the DataPreparation and ProfilingIntermittent Notebooks, run first the DataPreparation and save your data. Load them into the ProfilingIntermittent and having in mind the [Intermittent Classificator Chart](Docs/Images/intermittent_TS.png?raw=true "Intermittent time series"), set new parameters for thres_cv2_constant, thres_cv2, thres_adi, thres_sddi, min_time_cons and look if the resulting classification makes sense. 
 
 ### References on intermittent time series: ​
 Lancaster Centre For Marketing Analytics and Forecasting ​(https://www.lancaster.ac.uk/lums/research/areas-of-expertise/centre-for-marketing-analytics-and-forecasting/)
@@ -159,7 +155,7 @@ Methods for Intermittent Demand Forecasting​ (https://www.lancaster.ac.uk/pg/w
 - Moving average or actual zero value
 ##### Unforecastable time and unforecastable quantity
 - Do not use a statistical model, it is better to develop a deterministic model (i.e. based on if/then rules)
-##### Intermittent, lumpy, erratic
+##### Spikes, lumpy, erratic
 - Croston’s method​
 - Adjusted Croston methods ​
 - Model-based forecasting methods
@@ -565,8 +561,23 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-# Trademarks
+## As data scientist, how can I contribute?
+You can contribute both in extending the **Profiling** tool and in the data preparation and scoring part of this accelerator.
 
+### How to contribute to profiling?
+What needs to be done is to test and define intermittent indicators (thres_cv2_constant, thres_cv2, thres_adi, thres_sddi, min_time_cons) for other types of data than electricity consumption, as reported below.
+
+#### Insurance Claims data
+thres_cv2_constant = 0.01
+thres_cv2 = 0.2
+thres_adi = 1.2
+thres_sddi = 6.0
+min_time_cons = 25
+
+### How to contribute to data preparation and scoring?
+What needs to be done is the improve the code to make it scalable and more efficient when working with big datasets (e.g. more than 100 id).
+
+# Trademarks
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
 trademarks or logos is subject to and must follow 
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
