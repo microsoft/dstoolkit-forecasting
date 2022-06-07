@@ -97,9 +97,9 @@ Lancaster Centre For Marketing Analytics and Forecasting ​(https://www.lancast
 Methods for Intermittent Demand Forecasting​ (https://www.lancaster.ac.uk/pg/waller/pdfs/Intermittent_Demand_Forecasting.pdf)
 
 # Getting Started
-1. Create a new conda environment named forecasting_energy using the forecasting_energy_env.yml file in the Environment folder in the repository. To install a new environment using conda, you can access Anaconda navigator, click on import, name the new environment as forecasting_energy, select Python 3.8 and use the path to forecasting_energy_env.yml to install the new environment. 
-2. To have an idea of software dependencies, read Requirements.txt
-3. Create a config.yaml in Configuration folder, in order to run the code on your local machine/virtual machine. This is an example of the file:
+1. Create a new conda environment named forecasting_energy using `forecasting_energy_env.yml` in the `/Environment` folder in the repository. To install a new environment using conda, you can access Anaconda navigator, click on import, name the new environment as forecasting_energy, select Python 3.8 and use the path to `forecasting_energy_env.yml` to install the new environment. 
+2. To have an idea of software dependencies, read `requirements.txt`
+3. Create a `config.yaml` in Configuration folder, in order to run the code on your local machine/virtual machine. This is an example of the file:
 
 ### config.yaml file example
 
@@ -114,16 +114,16 @@ data_dir:
 ## Default Directory Structure
 
 ```bash
-├───Code     # Folder containing all the custom function created for this accelerator
-│   ├───Plotting    # Plotting functions
-│   └───Profiling   # Profiling time series functions
+├───Code                 # Folder containing all the custom function created for this accelerator
+│   ├───Plotting         # Plotting functions
+│   └───Profiling        # Profiling time series functions
 │       ├───Intermittent # Identification and classification of intermittent time series functions
-│   └───Regressors # Create useful time series regressors, such as calendar variables or temperature transformations
-│   └───Scoring # Create train and test sets, training, forecasting and computing kpis functions
-│   └───Utils   # Several utils functions recalled in the notebooks
-├── Configuration # config.py that lead to config.yaml. with configuration 
-├───Docs # Additional documents
-├───Notebooks     # Notebooks to do Data Preparation, Scoring and Forecasting and Profiling 
+│   └───Regressors       # Create useful time series regressors, such as calendar variables or temperature transformations
+│   └───Scoring          # Create train and test sets, training, forecasting and computing kpis functions
+│   └───Utils            # Several utils functions recalled in the notebooks
+├── Configuration        # config.py that lead to config.yaml. with configuration 
+├───Docs                 # Additional documents
+├───Notebooks            # Notebooks to do Data Preparation, Scoring and Forecasting and Profiling 
 ├── .gitignore
 ├── CODE_OF_CONDUCT.md
 ├── LICENSE.md
