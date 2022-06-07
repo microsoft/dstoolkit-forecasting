@@ -12,6 +12,89 @@ Time series modelling is defined as the combination of:
 
 Each model is optimized to better fit the data generation process of the phenomenon we want to forecast: from energy consumption to spare parts demand. Classification of time series in terms of profile, or consumption profile if we are referring to energy consumption, helps in defining the best fitting model in terms of choice of regressors (calendar variables or temperatures), forecasting algorithm (ARIMA vs exponential smoothing) and train set (one year or just few days of data). 
 
+# I am a data scientist new to demand forecasting. How can this accelerator help me? What should I do to use it?
+## What do I need in terms of time series data to use this accelerator?
+This accelerator deals with so-called **panel data**. In statistics and econometrics, panel data or longitudinal data is data that contains observations about different cross sections (groups or ids) across time. Examples of groups that may make up panel data series include countries, firms, individuals, or demographic groups. 
+
+Panel data is a collection of quantities obtained across multiple individuals, that are assembled over intervals in time and ordered chronologically. Examples of individual groups include individual people, countries, and companies.
+
+![Alt text](Docs/Images/panel_data.png?raw=true "Panel data")
+
+Specifically:
+
+| Group or Id     | Time period | Notation   |
+| :---        | :---   | :--- |
+| 1      | 1       | $Y_{11}$  |
+| 1      | 2      | $Y_{12}$  |
+| 1      | T       | $Y_{1T}$  |
+| $\vdots$ | $\vdots$ | $\vdots$ |
+| N      | 1       | $Y_{N1}$  |
+| N      | 2      | $Y_{N2}$  |
+| N      | T       | $Y_{NT}$  |
+
+Example datasets:
+
+| Field     | Topics | Example dataset     |
+| :---        | :---   | :--- |
+| Microeconomics      | GDP across multiple countries, Unemployment across different states, Income dynamic studies, international current account balances.       | [Panel Study of Income Dynamics (PSID)](https://psidonline.isr.umich.edu/)   |
+| Macroeconomics   | International trade tables, world socioeconomic tables, currency exchange rate tables.       | [Penn World Tables](https://www.rug.nl/ggdc/productivity/pwt/)     |
+Epidemiology and Health Statistics|	Public health insurance data, disease survival rate data, child development and well-being data| [Medical Expenditure Panel Survey](https://www.meps.ahrq.gov/mepsweb/)
+Finance|	Stock prices by firm, market volatilities by country or firm|	[Global Market Indices](https://finance.yahoo.com/world-indices/)
+
+If you have a **single time series** it can be thought of as special cases of panel data that are in one dimension only (one panel member or individual), so you can still take advantge from the accelerator, altought it is not useful to run the profiler, since you will have just one profile by default. 
+
+## Why this accelerator might be useful for you
+1. It provides you with guidelines Notebooks that can help you taking into account all necessary steps in order to perform a good data preparation, which is crucial in forecasting
+2. It provides you with a bunch of useful functions you might need when dealing with demand forecasting, such as:
+- Cool sliding plots like the one below:
+  ![Alt text](Docs/Images/sliding_plot.png?raw=true "Sliding plot")
+- Adding holidays by country or other regressors such as months, weekdays and interaction terms
+- Creating normal temperature future scenarios to generate years-ahead forecasts
+- Filling missing data using similar days or similar weeks values 
+- Compute errors like mean absolute error and mean absolute percentage error (also in case of zero dividend...)
+- Wrap up results in tidy Excel or csv files
+3. If you have several time series to forecast, thanks to the **Profiling** module it allows you to quickly understand how "difficult" to forecast are the time series you are dealing with by classifying time series as intermittent or regular. If it is the first case you know you might have troblues with accuracy, while if it is the latter you know you can relax a bit more. This is crucial to drive the right customer expectations on the forecast accuracy. Profiling also helps you accelerating the production of forecast when dealing with high numbers of time series to forecast (from >10 up to >1000): by grouping time series by identifying for example 2 intermittent + 4 regular consumption profiles, you can develop 6 models and apply them to all your time series by category, reducing work load while increasing accuracy
+4. It helps you to quickly run backtesting with multiple models, choosing the best in terms of mean absolute error
+
+## How to use this accelerator as guideline
+This accelerator provides you with 5 Notebooks that drives you through the essential steps you need to obtain a good forecast.
+
+### Notebooks
+Notebooks are available in the Notebooks folder and provide guidance to use the Forecast 2.0 functions. 
+#### 1. EnergyDataExploration
+A notebook that provides an exploratory data analysis in order to understand the type of time series you are dealing with
+#### 2. EnergyPredictionDataPreparation
+A notebook that helps with Time Series Data Preparation, in particular how to deal with NAs, how to aggregate time series and how to add create useful regressors (e.g. calendar variables)
+#### 3. EnergyProfilingIntermittent
+A notebook that profiles time series by classify them among regular, intermittent, lumpy, erratic, unforecastable in terms of time, unforecastable in terms of quantity, constant and constant at zero
+#### 4. EnergyClusteringRegular
+A notebook that performs a k-means flat cluster analysis on those time series that were classified as regular
+#### 5. EnergyPredictionScoring
+A notebook that helps you produce a forecast, plotting the results and compute KPIs on a panel dataframe, where you have multiple timeseries identified by a given group or id (e.g. multiple sensors time series, multiple plants or site-id energy consumption, etc)
+
+## How should I validate a model?
+You can validate your model using the following KPIs (implemented, please refer to the EnergyPredictionScoring Notebooks and to the Functions section below):
+1. Mean Error (average of all forecast-actual)
+2. Mean Absolute Error (average of all absolute values (forecast-actual))
+3. Mean Absolute Percentage Error (average of all absolute errors/actual)
+
+### Interpreting errors 
+As you can infer, being the above KPIs arithmetic averages their values depends on:
+- **Seasonality**
+  This means that when you have for example yearly seasonality, you might have periods of the year where the model performs better and where the model perform worse. Make sure which one is best for your use case.
+- **Low demand values**
+  This means that when you have for example a lot of low demand actual values and your forecast is in the neighbourhood of that value, your Absolute Percentage Error will easily result very close to 1, significantly worsening your MAPE. Make sure to interpret your error results accordingly.
+
+Other important factors that can affect your error: 
+- **Auto-regressive components**
+  If you have data availability that allows to employ auto-regressive components, i.e. the lagged value of the variable you want to forecast, this will improve significantly your accuracy.
+- **Length of forecast horizon**
+  If you need to forecast a long time horizon ahead (i.e. you start from daily data granularity and you need to forecast years ahead), this will reduce your accuracy
+- **Measurement error**
+  If your data have a lot of outliers, missing data or errors related to measuring (i.e. sensors data), this will reduce your accuracy
+- **Collinearity**
+  Multicollinearity is a statistical concept where several independent variables in a model are correlated. Two variables are considered to be perfectly collinear if their correlation coefficient is +/- 1.0. Multicollinearity among independent variables will result in less reliable statistical inferences. You might consider to use techniques such as Principal Component Analysis in order to deal with the issue. 
+
 # Profiling (clustering) Time Series:​
 The **goal** is to identify consumption patterns that are similar to each other in order to assign the optimal model in terms of min of MAE or MSE​. 
 
@@ -20,7 +103,6 @@ The **first step** is to identify those series that are classified as “intermi
 The **expected output** is to label each time series as intermittent with respect to regular.
 
 ### Identifying intermittent time series:​
-
 Definition of intermittent time series: intermittent time series or demand comes about when a product or a time series experiences several periods of zero demand. Often in these situation, when demand occurs it is small, and sometimes highly variable in size​
 
 #### How to identify intermittent time series:​
@@ -30,25 +112,60 @@ Compute the following indicators such as
 3. Standard Deviation of Inter-demand Interval (SDDI) ​
 
 Based on their values, it is possible to identify intermittent time series as:
-- intermittent
-- lumpy
-- erratic
-- unforecastable in terms of time volatility
-- unforecastable in terms of quantity volatility
-- regular time series ​
+  - spikes
+  - lumpy
+  - erratic
+  - unforecastable in terms of time volatility
+  - unforecastable in terms of quantity volatility
+  - constant
+  - constant at zero
+  - regular time series ​
 
 ![Alt text](Docs/Images/intermittent_TS.png?raw=true "Intermittent time series")
 
+##### Intermittent indicators parameters
+Intermittent indicators parameters vary depending on the type of time series (i.e. data generation process of the time series) such as energy consumption in KWh or insurance claims in USD, therefore intermittent indicators must be set every time depending on the type of time series and their validation is done looking at time series charts resuling from the profiling Notebook.
+
+Intermittent indicators are the following:
+  - **thres_cv2_constant** defines the threshold value to set constant time series with respect to a constant at zero time series
+  - **thres_cv2** defines the threshold value between low CV2 and high CV2
+  - **thres_adi** defines the threshold value between low ADI and high ADI
+  - **thres_sddi** defines the threshold value between low SDDI and high SDDI
+  - **min_time_cons** defines the threshold value of minimum time between two demand entries (on with respect to off demand)
+
+Parameters for electricity consumption in KWh/hourly data:
+  - thres_cv2_constant = 0.06
+  - thres_cv2 = 2
+  - thres_adi = 3
+  - thres_sddi = 6.2
+  - min_time_cons = 2
+
+Parameters for insurance claims in USD/daily data:
+  - thres_cv2_constant = 0.01
+  - thres_cv2 = 0.2
+  - thres_adi = 1.2
+  - thres_sddi = 6.2
+  - min_time_cons = 20
+
+### References on intermittent time series: ​
+Lancaster Centre For Marketing Analytics and Forecasting ​(https://www.lancaster.ac.uk/lums/research/areas-of-expertise/centre-for-marketing-analytics-and-forecasting/)
+
+Methods for Intermittent Demand Forecasting​ (https://www.lancaster.ac.uk/pg/waller/pdfs/Intermittent_Demand_Forecasting.pdf)
+
 #### Methods to forecast intermittent time series (not yet implemented in this accelerator):​
+##### Constant
+- Moving average
+##### Constant at zero
+- Moving average or actual zero value
+##### Unforecastable time and unforecastable quantity
+- Do not use a statistical model, it is better to develop a deterministic model (i.e. based on if/then rules)
+##### Intermittent, lumpy, erratic
 - Croston’s method​
 - Adjusted Croston methods ​
-- Model-based forecasting methods 
+- Model-based forecasting methods
   - ARMA models​
   - DARMA models -> Discrete ARMA​
   - INARMA models -> Integer-valued ARMA (INARMA)​
-- Alternative methods
-  - Boostrapping​
-  - Temporal aggregation​
 
 ### Clustering profiles​
   - Clustering regular time series using K-Means flat
@@ -84,12 +201,6 @@ Based on their values, it is possible to identify intermittent time series as:
 | 17 |Automating iterative tasks of machine learning model development|[AutoML in Azure ML](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-configure-auto-train#supported-models) |Not yet implemented    |  |
 | 18 |Netflix forecasting package | [Metaflow](https://docs.metaflow.org/introduction/what-is-metaflow) |Not yet implemented    |  |
 
-
-## References: ​
-Lancaster Centre For Marketing Analytics and Forecasting ​(https://www.lancaster.ac.uk/lums/research/areas-of-expertise/centre-for-marketing-analytics-and-forecasting/)
-
-Methods for Intermittent Demand Forecasting​ (https://www.lancaster.ac.uk/pg/waller/pdfs/Intermittent_Demand_Forecasting.pdf)
-
 # Getting Started
 1. Create a new conda environment named forecasting_energy using the forecasting_energy_env.yml file in the Environment folder in the repository. To install a new environment using conda, you can access Anaconda navigator, click on import, name the new environment as forecasting_energy, select Python 3.8 and use the path to forecasting_energy_env.yml to install the new environment. 
 2. To have an idea of software dependencies, read Requirements.txt
@@ -118,6 +229,7 @@ data_dir:
 ├── Configuration # config.py that lead to config.yaml. with configuration 
 ├───Docs # Additional documents
 ├───Notebooks     # Notebooks to do Data Preparation, Scoring and Forecasting and Profiling 
+├───Test     # Test Notebooks to do Data Preparation, Scoring and Forecasting and Profiling on various use cases
 ├── .gitignore
 ├── CODE_OF_CONDUCT.md
 ├── LICENSE.md
@@ -131,19 +243,6 @@ data_dir:
 1. Create a config.yaml as described above and compile it as:
     - In data_dir set your folder tree for input, output and plot folder
     - In saving choose your saving preferences
-
-## Notebooks
-Notebooks are available in the Notebooks folder and provide guidance to use the Forecast 2.0 functions. 
-### 1. Data Exploration
-A notebook that provides an exploratory data analysis in order to understand the type of time series we are dealing with
-### 2. EnergyPredictionDataPreparation
-A notebook that helps with Time Series Data Preparation, in particular how to deal with NAs, how to aggregate time series and how to add create useful regressors (e.g. calendar variables)
-### 3. ProfilingIntermittent
-A notebook that profiles time series by classify them among regular, intermittent, lumpy, erratic, unforecastable in terms of time, unforecastable in terms of quantity
-### 4. ClusteringRegular
-A notebook that performs a k-means flat cluster analysis on those time series that were classified as regular
-### 5. EnergyPredictionScoring
-A notebook that helps you produce a forecast, plotting the results and compute KPIs on a panel dataframe, where you have multiple timeseries identified by a given id (e.g. multiple sensors time series, multiple plants or site-id energy consumption, etc)
 
 # Functions
 Functions are available in the Code folder.
