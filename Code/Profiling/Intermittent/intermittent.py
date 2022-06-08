@@ -63,6 +63,7 @@ class Intermittent:
             
         ### Removing nan
         vect = vect[vect!=np.nan]
+        vect = vect.astype(np.float)
 
         ### Create low demand list names
         list_low_demand = ["zero", "perc_threshold"]
@@ -82,7 +83,7 @@ class Intermittent:
                 nzd = vect[vect>low_demand]
                 k = len(nzd)
                 
-                if sum(vect[vect>low_demand])>=2:
+                if (sum(vect[vect>low_demand])>=2) & (k>1):
                     x = np.append([nzd[0]], [nzd[1:k] - nzd[0:(k-1)]])
                     
                     cv2 = Intermittent.cv2(nzd, highest, lowest)
@@ -97,7 +98,7 @@ class Intermittent:
         
         return res
     
-    def enh_compute_indicator_values(vect, threshold, perc, quant, highest, lowest):   
+    def enhanced_compute_indicator_values(vect, threshold, perc, quant, highest, lowest):   
         ''' Computes indicator values (enhanced)
         :params: vect as numpy array, threshold as numeric, perc as numeric, quant as numeric, highest and lowest as scalars 0<=x<=1 as winsorization percentages
         :return: a dictionary
@@ -113,8 +114,9 @@ class Intermittent:
             vect = vect[1:len(vect)]
             print('Threshold:', threshold)
             
-        ### Removing nan
-        vect = vect[vect!=np.nan]
+        ### Removing nan and selecting float
+        vect = vect[(vect!=np.nan)]
+        vect = vect.astype(np.float)
 
         ### Z function
         def Z(quant):
@@ -136,7 +138,7 @@ class Intermittent:
             nzd = vect[vect>low_demand]
             k = len(nzd)
             
-            if sum(vect[vect>low_demand])>=2:
+            if (sum(vect[vect>low_demand])>=2) & (k>1):
                 x = np.array([nzd[0]]) + [nzd[1:k] - nzd[0:(k-1)]] + np.array([len(vect)+1-nzd[k-1]])
 
                 cv2 = Intermittent.cv2(nzd, highest, lowest)
@@ -196,18 +198,18 @@ class Intermittent:
         except:
             print('classify_intermittent: no constant ids')
 
-        # Intermittent
-        mask_intermittent = (score_no_nan.type == type) &\
+        # Spikes
+        mask_spikes = (score_no_nan.type == type) &\
                                         (score_no_nan.k > min_time_cons) &\
                                         (score_no_nan.cv2 < thres_cv2) &\
                                         (score_no_nan.cv2 >= thres_adi) &\
                                         (score_no_nan.cv2 < thres_sddi)
-        df_intermittent = score_no_nan.loc[mask_intermittent, ]
+        df_spikes = score_no_nan.loc[mask_spikes, ]
         try:
-            df_intermittent.loc[:, 'profile'] = 'intermittent'
-            print('classify_intermittent: intermittent ids', len(df_intermittent))
+            df_spikes.loc[:, 'profile'] = 'spikes'
+            print('classify_intermittent: spikes ids', len(df_spikes))
         except:
-            print('classify_intermittent: no intermittent ids')
+            print('classify_intermittent: no spikes ids')
 
         # Lumpy
         mask_lumpy = (score_no_nan.type == type) &\
@@ -260,13 +262,13 @@ class Intermittent:
             print('classify_intermittent: no unforecastable_quantity ids')
         
         # df_profiling        
-        df_profiling = pd.concat([df_regular, df_constant_zero, df_constant, df_intermittent, df_lumpy, df_erratic, df_unforecastable_time, df_unforecastable_quantity], axis=0)
+        df_profiling = pd.concat([df_regular, df_constant_zero, df_constant, df_spikes, df_lumpy, df_erratic, df_unforecastable_time, df_unforecastable_quantity], axis=0)
         
         return df_profiling
     
     def call_intermittent_function(func, *args):
         from Code.Profiling.Intermittent.intermittent import Intermittent
-        func_dict = {'enh_compute_indicator_values': Intermittent.enh_compute_indicator_values, 'compute_indicator_values': Intermittent.compute_indicator_values}
+        func_dict = {'enhanced_compute_indicator_values': Intermittent.enhanced_compute_indicator_values, 'compute_indicator_values': Intermittent.compute_indicator_values}
         result = func_dict.get(func)(*args)
         return result
 

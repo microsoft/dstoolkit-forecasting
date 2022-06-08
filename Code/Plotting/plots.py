@@ -32,6 +32,9 @@ class Plots:
         ### Setup          
         date = Utils.find_date(df)
         
+        ## Sort
+        df.sort_values(date, inplace=True)
+        
         ## Create figure
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=list(df.loc[df[id] == i, date]), y=list(df.loc[df[id] == i, serie_to_plot]), name=str(i)))
@@ -96,11 +99,15 @@ class Plots:
         
         ### Setup
         date = Utils.find_date(df)
+    
         if isinstance(date, list):
             date = list(set(Utils.find_date(df)) - set(['train_start_date', 'train_end_date', 'test_start_date', 'test_end_date']))[0]
         
-        y = predict_col
-        fcst = expected_values
+        y = predict_col.copy()
+        fcst = expected_values.copy()
+        
+        ## Sort
+        df = df.sort_values(date).copy()
         
         ## Adding model info to chart title
         if 'best_model' in list(df.columns):
