@@ -178,7 +178,7 @@ python-dateutil==2.8.1
 python-slugify==6.1.1
 pytz==2020.4
 pytz-deprecation-shim==0.1.0.post0
-pywin32==227
+pywin32==301
 pywinpty==1.1.5
 PyYAML==6.0
 pyzmq==22.3.0
