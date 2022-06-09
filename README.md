@@ -2,6 +2,63 @@
 
 # Forecasting 2.0 Accelerator
 
+- [Forecasting 2.0 Accelerator](#forecasting-20-accelerator)
+- [Overview](#overview)
+- [I am a data scientist new to demand forecasting. How can this accelerator help me? What should I do to use it?](#i-am-a-data-scientist-new-to-demand-forecasting-how-can-this-accelerator-help-me-what-should-i-do-to-use-it)
+  - [What do I need in terms of time series data to use this accelerator?](#what-do-i-need-in-terms-of-time-series-data-to-use-this-accelerator)
+  - [Why this accelerator might be useful for you](#why-this-accelerator-might-be-useful-for-you)
+  - [How to use this accelerator as guideline](#how-to-use-this-accelerator-as-guideline)
+    - [Notebooks](#notebooks)
+      - [1. EnergyDataExploration](#1-energydataexploration)
+      - [2. EnergyPredictionDataPreparation](#2-energypredictiondatapreparation)
+      - [3. EnergyProfilingIntermittent](#3-energyprofilingintermittent)
+      - [4. EnergyClusteringRegular](#4-energyclusteringregular)
+      - [5. EnergyPredictionScoring](#5-energypredictionscoring)
+  - [How should I validate a model?](#how-should-i-validate-a-model)
+    - [Interpreting errors](#interpreting-errors)
+- [Profiling (clustering) Time Series:​](#profiling-clustering-time-series)
+    - [Identifying intermittent time series:​](#identifying-intermittent-time-series)
+      - [How to identify intermittent time series:​](#how-to-identify-intermittent-time-series)
+        - [Intermittent indicators parameters](#intermittent-indicators-parameters)
+        - [What if I am working with data that are not related to energy consumption?](#what-if-i-am-working-with-data-that-are-not-related-to-energy-consumption)
+    - [References on intermittent time series: ​](#references-on-intermittent-time-series-)
+      - [Methods to forecast intermittent time series (not yet implemented in this accelerator):​](#methods-to-forecast-intermittent-time-series-not-yet-implemented-in-this-accelerator)
+        - [Constant](#constant)
+        - [Constant at zero](#constant-at-zero)
+        - [Unforecastable time and unforecastable quantity](#unforecastable-time-and-unforecastable-quantity)
+        - [Spikes, lumpy, erratic](#spikes-lumpy-erratic)
+    - [Clustering profiles​](#clustering-profiles)
+      - [Methods to forecast regular time series](#methods-to-forecast-regular-time-series)
+- [Getting Started](#getting-started)
+    - [config.yaml file example](#configyaml-file-example)
+  - [Default Directory Structure](#default-directory-structure)
+  - [Build and Test](#build-and-test)
+- [Functions](#functions)
+  - [Plotting](#plotting)
+    - [Class Plots](#class-plots)
+  - [Profiling](#profiling)
+    - [Class Intermittent](#class-intermittent)
+  - [Regressors](#regressors)
+    - [Class Regressors](#class-regressors)
+    - [Class SimilarDay:](#class-similarday)
+    - [Class StandardConsumption:](#class-standardconsumption)
+    - [Class Temperatures:](#class-temperatures)
+  - [Scoring](#scoring)
+    - [Class Training](#class-training)
+    - [Class Forecasting](#class-forecasting)
+    - [Class Scoring](#class-scoring)
+    - [Class TrainTest](#class-traintest)
+  - [Kpi](#kpi)
+    - [Class Kpi](#class-kpi)
+  - [Utils](#utils)
+    - [Class Utils](#class-utils)
+    - [Class AlphabeticalCombinations](#class-alphabeticalcombinations)
+- [Contributing](#contributing)
+  - [As data scientist, how can I contribute?](#as-data-scientist-how-can-i-contribute)
+    - [How to contribute to profiling?](#how-to-contribute-to-profiling)
+      - [Insurance Claims data](#insurance-claims-data)
+    - [How to contribute to data preparation and scoring?](#how-to-contribute-to-data-preparation-and-scoring)
+- [Trademarks](#trademarks)
 # Overview
 This accelerator provides code and guidance to produce time series forecasting and time series profiling. The aim of this accelerator is to help data scientists to forecast multiple time series by building models based on the time-series profiling, by performing an accurate data preparation and by training and forecasting multiple time series based with models created ad-hoc for each profile. 
 
@@ -133,12 +190,19 @@ Intermittent indicators are the following:
   - **thres_sddi** defines the threshold value between low SDDI and high SDDI
   - **min_time_cons** defines the threshold value of minimum time between two demand entries (on with respect to off demand)
 
-Parameters for electricity consumption in KWh/hourly data:
+Parameters for electricity consumption in KWh, daily data.
   - thres_cv2_constant = 0.06
   - thres_cv2 = 2
   - thres_adi = 3
   - thres_sddi = 6.2
   - min_time_cons = 2
+
+Parameters for insurance claims data in USD, daily data. Claims from work accidents in mining industry.
+- thres_cv2_constant = 0.01
+- thres_cv2 = 0.2
+- thres_adi = 1.2
+- thres_sddi = 6.0
+- min_time_cons = 25
 
 ##### What if I am working with data that are not related to energy consumption?
 You can still use the accelerator and the profiler, but you need to setup new intermittent indicators. To do so, create a copy of the DataPreparation and ProfilingIntermittent Notebooks, run first the DataPreparation and save your data. Load them into the ProfilingIntermittent and having in mind the [Intermittent Classificator Chart](Docs/Images/intermittent_TS.png?raw=true "Intermittent time series"), set new parameters for thres_cv2_constant, thres_cv2, thres_adi, thres_sddi, min_time_cons and look if the resulting classification makes sense. 
@@ -568,11 +632,13 @@ You can contribute both in extending the **Profiling** tool and in the data prep
 What needs to be done is to test and define intermittent indicators (thres_cv2_constant, thres_cv2, thres_adi, thres_sddi, min_time_cons) for other types of data than electricity consumption, as reported below.
 
 #### Insurance Claims data
-thres_cv2_constant = 0.01
-thres_cv2 = 0.2
-thres_adi = 1.2
-thres_sddi = 6.0
-min_time_cons = 25
+Insurance claims data in USD, daily data. Claims from work accidents in mining industry.
+
+- thres_cv2_constant = 0.01
+- thres_cv2 = 0.2
+- thres_adi = 1.2
+- thres_sddi = 6.0
+- min_time_cons = 25
 
 ### How to contribute to data preparation and scoring?
 What needs to be done is the improve the code to make it scalable and more efficient when working with big datasets (e.g. more than 100 id).
