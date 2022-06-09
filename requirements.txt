@@ -166,7 +166,7 @@ pycodestyle==2.7.0
 pycparser==2.20
 pydeck==0.7.1
 Pygments==2.10.0
-PyJWT==1.7.1
+PyJWT==2.4.0
 PyMeeus==0.5.11
 pyodbc==4.0.32
 pyOpenSSL==19.1.0
