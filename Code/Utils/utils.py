@@ -250,7 +250,7 @@ class Utils:
         print(df_resampled)
         return df_resampled 
     
-    def resample_timeseries_pandassql(df_name, id_column, date_column, freq, aggregation_per_col):
+    def resample_data_pandassql(df_name, id_column, date_column, freq, aggregation_per_col):
         """
         Resample the data to a particular frequency
         :params: df_name as string name of a pandas dataframe, id as string, date_var as string, 
@@ -267,7 +267,7 @@ class Utils:
         for i in set(aggregation_per_col.values()):
                 if i.upper() not in ['MAX','MIN','LAST', 'AVG', 'SUM' ]:
                     print('''Aggregation not supported: Use one of these:
-                            FIRST, LAST, SUM, AVG''')
+                            'MAX','MIN','LAST', 'AVG', 'SUM'''')
                     return
 
                 if window == 'm':
