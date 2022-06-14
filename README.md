@@ -565,6 +565,10 @@ resample_data(df, id, date_var, sampling, dict_grouping)
 ```
 Resample by aggregating the data to a particular frequency as defined in dict_grouping as{variable_to_resample: 'function_to_apply'}, i.e.{value: 'sum'}
 ```bash
+resample_data(df, id, date_var, sampling, dict_grouping)
+```
+Resample by aggregating the data to a particular frequency (x-m,x-h,x-D) as defined (e.g. 3-M) in aggregation_per_col as{variable_to_resample: 'function_to_apply'}, i.e.{value: 'sum'}
+```bash
 add_seq(df, date_var, serie, freq, end_date='', start_date='')
 ```
 Creates a sequence of completes date/hours to a dataframe
