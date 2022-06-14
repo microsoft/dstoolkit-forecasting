@@ -153,7 +153,7 @@ pathspec==0.8.1
 patsy==0.5.2
 pep8==1.7.1
 pickleshare==0.7.5
-Pillow==8.3.2
+Pillow==9.0.1
 plotly==5.3.1
 portalocker==1.7.1
 prometheus-client==0.12.0
