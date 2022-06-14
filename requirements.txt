@@ -146,6 +146,7 @@ opt-einsum==3.3.0
 outcome==1.1.0
 packaging==21.2
 pandas==1.3.5
+pandasql==0.7.3
 pandocfilters==1.5.0
 parso==0.8.2
 pathspec==0.8.1

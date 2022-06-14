@@ -4,6 +4,7 @@ import string
 import numpy as np
 import re
 from functools import reduce
+from pandasql import sqldf
 
 # datetime functions
 import datetime as dt
@@ -248,6 +249,69 @@ class Utils:
             print('resample_data: variable', list_variables[k], 'completed' )
         print(df_resampled)
         return df_resampled 
+    
+    def resample_data_pandassql(df_name, id_column, date_column, freq, aggregation_per_col):
+        """
+        Resample the data to a particular frequency
+        :params: df_name as string name of a pandas dataframe, id as string, date_var as string, 
+            the sampling as string freq (e.g. 3-m, 5-h, 1-D) and aggregation_per_col as dictionary as {variable_to_resample: 'function_to_apply'}
+        :return: a Pandas dataframe
+        """ 
+        # TO-DO: check for interval of original series
+        pysqldf = lambda q: sqldf(q, globals())
+
+        num = freq.split('-')[0]
+        window = freq.split('-')[1]
+
+
+        for i in set(aggregation_per_col.values()):
+                if i.upper() not in ['MAX','MIN','LAST', 'AVG', 'SUM' ]:
+                    print('''Aggregation not supported: Use one of these:
+                            'MAX','MIN','LAST', 'AVG', 'SUM'''')
+                    return
+
+                if window == 'm':
+                    helper = f'''WITH helper AS(
+                                    SELECT *, Substr(date({date_column}), 1,Instr(date({date_column}),'-')-1) AS year,
+                                Substr(date({date_column}), -5,Instr(date({date_column}),'-')-3) AS month,
+                                Substr(date({date_column}), -2,Instr(date({date_column}),'-')-1) AS day,
+                                Substr(time({date_column}), 1,Instr(time({date_column}),':')-1) AS hour,
+                                CAST(Substr(time({date_column}), -5,Instr(time({date_column}),':')-1)/{num} AS modu) AS mod
+                                FROM {df_name}
+                    )\n'''
+                    groupby = 'year, month, day, hour, mod, '+str(id_column)
+
+                if window == 'h':
+                    helper = f'''WITH helper AS(
+                                SELECT *, Substr(date({date_column}), 1,Instr(date({date_column}),'-')-1) AS year,
+                                Substr(date({date_column}), -5,Instr(date({date_column}),'-')-3) AS month,
+                                Substr(date({date_column}), -2,Instr(date({date_column}),'-')-1) AS day,
+                                CAST(Substr(time({date_column}), 1,Instr(time({date_column}),':')-1)/{num} AS modu) as mod
+                                FROM {df_name}
+                    )\n'''
+                    groupby = 'year, month, day, mod, '+str(id_column)
+
+                if window == 'D':
+                    helper = f'''WITH helper AS(
+                      SELECT*, Substr(date({date_column}), 1,Instr(date({date_column}),'-')-1) AS year,
+                                Substr(date({date_column}), -5,Instr(date({date_column}),'-')-3) AS month,
+                                CAST(Substr(date({date_column}), -2,Instr(date({date_column}),'-')-1)/{num} AS modu) as mod
+                                FROM {df_name}
+                    )\n'''
+                    groupby = 'year, month, mod, '+str(id_column)
+
+        list_select = []
+        for i in aggregation_per_col:
+            aggElement = aggregation_per_col[i].upper()+'('+i+')' +' AS '+i
+            list_select.append(aggElement)
+        string_select = ',\n'.join(list_select)
+
+        agg = 'SELECT '+ date_column+ ','+string_select + '\n FROM helper\n GROUP BY '+ groupby
+        query = helper + agg
+
+        return pysqldf(query)
+    
+    
        
     def add_seq(df, date_var, serie, freq, end_date='', start_date=''):
         """
