@@ -118,21 +118,21 @@ This accelerator provides you with 5 Notebooks that drives you through the essen
 ### Notebooks
 Notebooks are available in the Notebooks folder and provide guidance to use the Forecast 2.0 functions. 
 #### 1. EnergyDataExploration
-A notebook that provides an exploratory data analysis in order to understand the type of time series you are dealing with
+[A notebook](./Notebooks/EnergyDataExploration.ipynb) that provides an exploratory data analysis in order to understand the type of time series you are dealing with
 #### 2. EnergyPredictionDataPreparation
-A notebook that helps with Time Series Data Preparation, in particular how to deal with NAs, how to aggregate time series and how to create useful regressors (e.g. calendar variables)
+[A notebook](./Notebooks/EnergyPredictionDataPreparation.ipynb) that helps with Time Series Data Preparation, in particular how to deal with NAs, how to aggregate time series and how to create useful regressors (e.g. calendar variables)
 #### 3. EnergyProfilingIntermittent
-A notebook that profiles time series to be regular, intermittent, lumpy, erratic, unforecastable in terms of time, unforecastable in terms of quantity, constant and constant at zero
+[A notebook](./Notebooks/EnergyProfilingIntermittent.ipynb) that profiles time series to be regular, intermittent, lumpy, erratic, unforecastable in terms of time, unforecastable in terms of quantity, constant and constant at zero
 #### 4. EnergyClusteringRegular
-A notebook that performs a k-means flat cluster analysis on those time series that were classified as regular
+[A notebook](./Notebooks/EnergyClusteringRegular.ipynb) that performs a k-means flat cluster analysis on those time series that were classified as regular
 #### 5. EnergyPredictionScoring
-A notebook that helps you produce a forecast, plotting the results and computing KPIs on a panel dataframe, where you have multiple timeseries identified by a given group or id (e.g. multiple sensors time series, multiple plants or site-id energy consumption, etc)
+[A notebook](./Notebooks/EnergyPredictionScoring.ipynb) that helps you produce a forecast, plot the results and compute KPIs on a panel dataframe, where you have multiple timeseries identified by a given group or id (e.g. multiple sensors time series, multiple plants or site-id energy consumption, etc)
 
 ## How should I validate a model?
 You can validate your model using the following KPIs (implemented, please refer to the EnergyPredictionScoring Notebooks and to the Functions section below):
-1. Mean Error (average of all forecast-actual)
-2. Mean Absolute Error (average of all absolute values (forecast-actual))
-3. Mean Absolute Percentage Error (average of all absolute errors/actual)
+1. `Mean Error` (average of all forecast-actual)
+2. `Mean Absolute Error` (average of all absolute values (forecast-actual))
+3. `Mean Absolute Percentage Error` (average of all absolute errors/actual)
 
 ### Interpreting errors 
 As you can infer, the above KPIs values depends on:
