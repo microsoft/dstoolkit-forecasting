@@ -261,7 +261,11 @@ Methods for Intermittent Demand Forecasting​ (https://www.lancaster.ac.uk/pg/w
 | 18 |Netflix forecasting package | [Metaflow](https://docs.metaflow.org/introduction/what-is-metaflow) |Not yet implemented    |  |
 
 # Getting Started
-1. Create a new conda environment named forecasting_energy using the forecasting_energy_env.yml file in the Environment folder in the repository. To install a new environment using conda, you can access Anaconda navigator, click on import, name the new environment as forecasting_energy, select Python 3.8 and use the path to forecasting_energy_env.yml to install the new environment. 
+1. Create a new conda environment named forecasting_energy using the `forecasting_energy_env.yml` in the `Environment` folder in the repository. To install a new environment using conda, you can access Anaconda navigator, click on import, name the new environment as forecasting_energy, select Python 3.8 and use the path to forecasting_energy_env.yml to install the new environment. Or you can use the following command: 
+```sh
+conda env create -f ./Environment/forecasting_energy.yml
+```
+
 2. To have an idea of software dependencies, read Requirements.txt
 3. Create a config.yaml in Configuration folder, in order to run the code on your local machine/virtual machine. This is an example of the file:
 
