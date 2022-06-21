@@ -266,18 +266,20 @@ Methods for Intermittent Demand Forecasting​ (https://www.lancaster.ac.uk/pg/w
 conda env create -f ./Environment/forecasting_energy.yml
 ```
 
-2. To have an idea of software dependencies, read Requirements.txt
-3. Create a config.yaml in Configuration folder, in order to run the code on your local machine/virtual machine. This is an example of the file:
+2. To have an idea of software dependencies, read `requirements.txt`
+3. Create a `config.yaml` in `Configuration` folder, in order to run the code on your local machine/virtual machine. This is an example of the file:
 
 ### config.yaml file example
 
+```sh
 data_dir:
   input_path: "Data/Input"
   output_path: "Data/Output"
   plot_path: "Data/Plots"
+```
 
 4. Create your input, output and plot path 
-5. Load the test dataset from Kaggle (https://www.kaggle.com/arashnic/building-sites-power-consumption-dataset/download"), unzip it and save it in your input folder
+5. Load the [test dataset from Kaggle](https://www.kaggle.com/arashnic/building-sites-power-consumption-dataset/download"), unzip and save it in your input folder
 
 ## Default Directory Structure
 
