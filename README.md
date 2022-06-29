@@ -1,4 +1,3 @@
-![banner](Docs/Images/banner.jpg)
 
 # Forecasting 2.0 Accelerator
 [Forecasting 2.0 accelerator presentation](Docs/Slides/ds_toolkit_forecasting_2.0_memo.pdf)
@@ -117,9 +116,9 @@ Notebooks are available in the Notebooks folder and provide guidance to use the 
 
 ## How should I validate a model?
 You can validate your model using the following KPIs (implemented, please refer to the EnergyPredictionScoring Notebooks and to the Functions section below):
-1. `Mean Error` (average of all forecast-actual)
-2. `Mean Absolute Error` (average of all absolute values (forecast-actual))
-3. `Mean Absolute Percentage Error` (average of all absolute errors/actual)
+1. `Mean Error`: average of all forecast-actual
+2. `Mean Absolute Error`: average of all absolute values (forecast-actual)
+3. `Mean Absolute Percentage Error`: average of all absolute errors/actual
 
 ### Interpreting errors 
 As you can infer, the above KPIs values depends on:
@@ -207,7 +206,7 @@ You can still use the accelerator and the profiler, but you need to setup new in
 ##### Unforecastable time and unforecastable quantity
 - Do not use a statistical model, it is better to develop a deterministic model (i.e. based on if/then rules)
 ##### Spikes, lumpy, erratic
-- Croston’s method​
+- Croston’s method: Implementation in [sktime](https://www.sktime.org/en/v0.8.0/api_reference/auto_generated/sktime.forecasting.croston.Croston.html)​
 - Adjusted Croston methods ​
 - Model-based forecasting methods
   - ARMA models​
