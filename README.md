@@ -1,3 +1,4 @@
+![banner](Docs/Images/banner.jpg)
 
 # Forecasting 2.0 Accelerator
 [Forecasting 2.0 accelerator presentation](Docs/Slides/ds_toolkit_forecasting_2.0_memo.pdf)
