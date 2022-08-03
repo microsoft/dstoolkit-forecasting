@@ -267,7 +267,7 @@ class Utils:
         for i in set(aggregation_per_col.values()):
                 if i.upper() not in ['MAX','MIN','LAST', 'AVG', 'SUM' ]:
                     print('''Aggregation not supported: Use one of these:
-                            'MAX','MIN','LAST', 'AVG', 'SUM'''')
+                            'MAX','MIN','LAST', 'AVG', 'SUM''')
                     return
 
                 if window == 'm':
