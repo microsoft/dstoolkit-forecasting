@@ -203,7 +203,7 @@ smmap==5.0.0
 sniffio==1.2.0
 sortedcontainers==2.4.0
 statsmodels==0.13.1
-streamlit==1.1.0
+streamlit==1.11.1
 tabulate==0.8.9
 tenacity==8.0.1
 tensorboard==2.2.2
