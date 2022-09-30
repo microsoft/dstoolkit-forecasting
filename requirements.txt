@@ -102,7 +102,7 @@ jedi==0.18.0
 jeepney==0.6.0
 Jinja2==2.11.3
 jmespath==0.10.0
-joblib==0.17.0
+joblib==1.2.0
 json-logging-py==0.2
 json5==0.8.5
 jsonpickle==1.4.1
