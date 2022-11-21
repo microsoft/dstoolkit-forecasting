@@ -210,7 +210,7 @@ tensorboard==2.2.2
 tensorboard-plugin-wit==1.7.0
 tensorflow==2.7.2
 tensorflow-estimator==2.2.0
-tensorflow-gpu==2.7.2
+tensorflow-gpu==2.9.3
 tensorflow-gpu-estimator==2.2.0
 termcolor==1.1.0
 terminado==0.12.1
