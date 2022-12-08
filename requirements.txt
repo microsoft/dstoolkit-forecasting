@@ -49,7 +49,7 @@ bleach==4.1.0
 blinker==1.4
 cached-property==1.5.2
 cachetools==4.1.1
-certifi==2020.6.20
+certifi==2022.12.7
 cffi==1.14.3
 charset-normalizer==2.0.6
 click==7.1.2
