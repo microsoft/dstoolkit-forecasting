@@ -90,7 +90,7 @@ class Plots:
         return fig
     
     
-    def sliding_fcst_plot(df, predict_col, expected_values, chart_title="", kpi=True):
+    def sliding_fcst_plot(df, y, fcst, chart_title="", kpi=True):
         """
         Creates a time series plot with sliding dates
         :params: df as pandas dataframe, chart_title as string, kpi as boolean 
@@ -102,10 +102,7 @@ class Plots:
     
         if isinstance(date, list):
             date = list(set(Utils.find_date(df)) - set(['train_start_date', 'train_end_date', 'test_start_date', 'test_end_date']))[0]
-        
-        y = predict_col.copy()
-        fcst = expected_values.copy()
-        
+                
         ## Sort
         df = df.sort_values(date).copy()
         
