@@ -184,7 +184,7 @@ pywinpty==1.1.5
 PyYAML==6.0
 pyzmq==22.3.0
 repackage==0.7.3
-requests==2.26.0
+requests==2.31.0
 requests-oauthlib==1.3.0
 rsa==4.7
 ruamel.yaml==0.16.12
